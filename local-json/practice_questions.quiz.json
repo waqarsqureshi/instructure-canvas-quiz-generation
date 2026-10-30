@@ -1,0 +1,477 @@
+{
+  "format": "canvas-browser-v1",
+  "title": "CT4109 Practice Questions Q1–Q20 — Weeks 1–4",
+  "questions": [
+    {
+      "id": "practice_q01", "type": "essay", "title": "Q1 — Homogeneous coordinates", "points": 6, "stimulusId": "",
+      "prompt": "(a) Write the Cartesian point (3, 4) in two different homogeneous forms, and convert (6, 9, 3)^T back to Cartesian coordinates. [2 marks]\n(b) Find the line l through (1, 1) and (3, 5) using a cross product. [2 marks]\n(c) Find the intersection of l with the line x = 0, whose homogeneous line vector is (1, 0, 0)^T. [2 marks]\nShow your working.",
+      "solution": "(a) (3, 4, 1)^T and (6, 8, 2)^T represent (3, 4); (6, 9, 3)^T becomes (2, 3).\n(b) (1, 1, 1) × (3, 5, 1) = (-4, 2, 2), giving -4x + 2y + 2 = 0, or y = 2x - 1.\n(c) (-4, 2, 2) × (1, 0, 0) = (0, 2, -2). Divide by -2 to obtain (0, -1).\nEquivalent non-zero homogeneous scalings are acceptable."
+    },
+    {
+      "id": "practice_q02", "type": "essay", "title": "Q2 — Transformation hierarchy", "points": 8, "stimulusId": "",
+      "prompt": "(a) State the degrees of freedom of a 2D Euclidean, similarity, affine and projective transformation. [4 marks]\n(b) For each, state which of these are preserved: parallelism, ratios of lengths on a line, angles, and cross-ratio. [2 marks]\n(c) How many point correspondences are needed to estimate a 2D homography, and why? State the non-degeneracy requirement. [2 marks]",
+      "solution": "(a) Euclidean: 3; similarity: 4; affine: 6; projective: 8.\n(b) Euclidean and similarity preserve all four listed properties. Affine preserves parallelism, ratios on a line and cross-ratio, but not angles. A general projective transformation preserves cross-ratio but not the other three.\n(c) Four point pairs in general position (no three collinear in either plane). A 3 × 3 homography has 9 entries minus one arbitrary scale = 8 degrees of freedom; each pair gives two independent equations."
+    },
+    {
+      "id": "practice_q03", "type": "essay", "title": "Q3 — Rotation matrices", "points": 8, "stimulusId": "",
+      "prompt": "Let R be the rotation of +90 degrees about the z-axis, acting on column vectors.\n(a) Write R and verify R^T R = I and det(R) = 1. [3 marks]\n(b) Compute R^(-1) without a general matrix inversion, and apply R to (1, 2, 3)^T. [2 marks]\n(c) A rotation Rx(+90 degrees) is applied after R. Write the combined matrix and explain whether the order matters. [3 marks]",
+      "solution": "(a) R = [[0, -1, 0], [1, 0, 0], [0, 0, 1]]. Its columns are orthonormal, so R^T R = I, and det(R) = 1.\n(b) R^(-1) = R^T = [[0, 1, 0], [-1, 0, 0], [0, 0, 1]]. Applying R gives (-2, 1, 3)^T.\n(c) Rx = [[1, 0, 0], [0, 0, -1], [0, 1, 0]]. The combined matrix is Rx R = [[0, -1, 0], [0, 0, -1], [1, 0, 0]]. Reversing the order gives a different result."
+    },
+    {
+      "id": "practice_q04_context", "type": "stimulus", "title": "Q4 — Shared camera data", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "A pinhole camera has focal length f = 8 mm, square pixels of size 5 micrometres, and a 1280 × 960 pixel sensor. Take the principal point at (width/2, height/2), with no skew.\nThe point in camera coordinates is (X, Y, Z) = (0.5, -0.2, 5) metres."
+    },
+    {
+      "id": "practice_q04_a_f", "type": "numerical", "title": "Q4(a) — Focal length in pixels", "points": 1, "stimulusId": "practice_q04_context",
+      "prompt": "Calculate the common focal length fx = fy in pixels. Enter a number only.",
+      "numeric": {"mode": "exact", "value": 1600, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "5 micrometres = 0.005 mm. fx = fy = 8 / 0.005 = 1600 pixels."
+    },
+    {
+      "id": "practice_q04_a_k", "type": "essay", "title": "Q4(a) — Intrinsic matrix K", "points": 2, "stimulusId": "practice_q04_context",
+      "prompt": "Write the camera intrinsic matrix K. Show how you obtain the principal point and focal lengths.",
+      "solution": "fx = fy = 8/0.005 = 1600 px. cx = 1280/2 = 640 and cy = 960/2 = 480.\nK = [[1600, 0, 640], [0, 1600, 480], [0, 0, 1]]."
+    },
+    {
+      "id": "practice_q04_b_u", "type": "numerical", "title": "Q4(b) — Projected u-coordinate", "points": 1.5, "stimulusId": "practice_q04_context",
+      "prompt": "Project the given camera-frame point. Enter its image u-coordinate in pixels.",
+      "numeric": {"mode": "exact", "value": 800, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "u = fx X/Z + cx = 1600(0.5/5) + 640 = 800 px."
+    },
+    {
+      "id": "practice_q04_b_v", "type": "numerical", "title": "Q4(b) — Projected v-coordinate", "points": 1.5, "stimulusId": "practice_q04_context",
+      "prompt": "Project the given camera-frame point. Enter its image v-coordinate in pixels.",
+      "numeric": {"mode": "exact", "value": 416, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "v = fy Y/Z + cy = 1600(-0.2/5) + 480 = 416 px."
+    },
+    {
+      "id": "practice_q04_c", "type": "essay", "title": "Q4(c) — Effect of doubling depth", "points": 2, "stimulusId": "practice_q04_context",
+      "prompt": "The point moves to Z = 10 m while X and Y remain fixed. What happens to its image offset from the principal point? Explain.",
+      "solution": "The offsets halve because they are proportional to 1/Z. At Z = 5 m they are (160, -64) px; at Z = 10 m they are (80, -32) px, giving image position (720, 448)."
+    },
+    {
+      "id": "practice_q05_context", "type": "stimulus", "title": "Q5 — Shared camera pose", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "K = [[800, 0, 320], [0, 800, 240], [0, 0, 1]], R = I, and the camera centre is C = (0, 0, -2)^T.\nUse Xc = R Xw + t and P = K[R | t]. The world point to project is Xw = (0.25, 0.125, 3)^T."
+    },
+    {
+      "id": "practice_q05_a", "type": "essay", "title": "Q5(a) — Translation and projection matrix", "points": 3, "stimulusId": "practice_q05_context",
+      "prompt": "Find t and write P = K[R | t]. Show your working.",
+      "solution": "t = -R C = (0, 0, 2)^T.\nK t = (640, 480, 2)^T.\nP = [[800, 0, 320, 640], [0, 800, 240, 480], [0, 0, 1, 2]]."
+    },
+    {
+      "id": "practice_q05_b_u", "type": "numerical", "title": "Q5(b) — World point projection u", "points": 1.5, "stimulusId": "practice_q05_context",
+      "prompt": "Project the given world point. Enter the image u-coordinate in pixels.",
+      "numeric": {"mode": "exact", "value": 360, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "Xc = (0.25, 0.125, 5). u = 800(0.25/5) + 320 = 360 px."
+    },
+    {
+      "id": "practice_q05_b_v", "type": "numerical", "title": "Q5(b) — World point projection v", "points": 1.5, "stimulusId": "practice_q05_context",
+      "prompt": "Project the given world point. Enter the image v-coordinate in pixels.",
+      "numeric": {"mode": "exact", "value": 260, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "Xc = (0.25, 0.125, 5). v = 800(0.125/5) + 240 = 260 px."
+    },
+    {
+      "id": "practice_q05_c", "type": "essay", "title": "Q5(c) — Projection matrix degrees of freedom", "points": 2, "stimulusId": "practice_q05_context",
+      "prompt": "Explain why a general 3 × 4 camera projection matrix P has 11 degrees of freedom.",
+      "solution": "There are 12 matrix entries, but multiplying the whole matrix by a non-zero scale does not change the projective mapping. Therefore 12 - 1 = 11 independent parameters."
+    },
+    {
+      "id": "practice_q06_context", "type": "stimulus", "title": "Q6 — Shared road measurement data", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "A forward-looking camera views a planar road. Ground coordinates are in centimetres.\nThe ground-to-image homography is H = [[2, 0, 100], [0, 1, 50], [0, 0.002, 1]].\nThe left and right kerb pixels are (200, 200) and (600, 200). Use the inverse homography followed by division by the homogeneous scale to recover ground coordinates."
+    },
+    {
+      "id": "practice_q06_a", "type": "essay", "title": "Q6(a) — Invert the road homography", "points": 4, "stimulusId": "practice_q06_context",
+      "prompt": "Compute H^(-1). A non-zero scalar multiple is acceptable. Show your working.",
+      "solution": "det(H) = 2(1 - 50 × 0.002) = 1.8.\nadj(H) = [[0.9, 0.2, -100], [0, 2, -100], [0, -0.004, 2]].\nH^(-1) = adj(H)/1.8. The adjugate alone gives the same Cartesian mapping after the perspective divide."
+    },
+    {
+      "id": "practice_q06_b_left_x", "type": "numerical", "title": "Q6(b) — Left kerb ground X", "points": 0.75, "stimulusId": "practice_q06_context",
+      "prompt": "Map the left kerb pixel to the road. Enter its ground X-coordinate in centimetres.",
+      "numeric": {"mode": "exact", "value": 100, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "adj(H)(200, 200, 1)^T = (120, 300, 1.2)^T. X = 120/1.2 = 100 cm."
+    },
+    {
+      "id": "practice_q06_b_left_y", "type": "numerical", "title": "Q6(b) — Left kerb ground Y", "points": 0.75, "stimulusId": "practice_q06_context",
+      "prompt": "Map the left kerb pixel to the road. Enter its ground Y-coordinate in centimetres.",
+      "numeric": {"mode": "exact", "value": 250, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "adj(H)(200, 200, 1)^T = (120, 300, 1.2)^T. Y = 300/1.2 = 250 cm."
+    },
+    {
+      "id": "practice_q06_b_right_x", "type": "numerical", "title": "Q6(b) — Right kerb ground X", "points": 0.75, "stimulusId": "practice_q06_context",
+      "prompt": "Map the right kerb pixel to the road. Enter its ground X-coordinate in centimetres.",
+      "numeric": {"mode": "exact", "value": 400, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "adj(H)(600, 200, 1)^T = (480, 300, 1.2)^T. X = 480/1.2 = 400 cm."
+    },
+    {
+      "id": "practice_q06_b_right_y", "type": "numerical", "title": "Q6(b) — Right kerb ground Y", "points": 0.75, "stimulusId": "practice_q06_context",
+      "prompt": "Map the right kerb pixel to the road. Enter its ground Y-coordinate in centimetres.",
+      "numeric": {"mode": "exact", "value": 250, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "adj(H)(600, 200, 1)^T = (480, 300, 1.2)^T. Y = 300/1.2 = 250 cm."
+    },
+    {
+      "id": "practice_q06_c_width", "type": "numerical", "title": "Q6(c) — Road width in metres", "points": 1, "stimulusId": "practice_q06_context",
+      "prompt": "Calculate the road width. Enter your answer in metres, not centimetres or pixels.",
+      "numeric": {"mode": "exact", "value": 3, "tolerance": 0.005, "min": 0, "max": 0, "figures": 3},
+      "solution": "The ground points are (100, 250) cm and (400, 250) cm. Their distance is 300 cm = 3 m."
+    },
+    {
+      "id": "practice_q06_c_explain", "type": "essay", "title": "Q6(c) — Why pixel subtraction is insufficient", "points": 2, "stimulusId": "practice_q06_context",
+      "prompt": "Why would simply subtracting the horizontal pixel coordinates, giving 400 pixels, not give the physical road width?",
+      "solution": "Perspective scale depends on position/depth. A pixel distance is not a metric distance. The calibrated inverse homography maps both endpoints into ground coordinates in known units; a single global pixels-to-centimetres factor is generally invalid."
+    },
+    {
+      "id": "practice_q07_context", "type": "stimulus", "title": "Q7 — Shared surgical measurement data", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "A calibrated overhead camera views a planar operating field. Field coordinates are in millimetres.\nThe field-to-image homography is H = [[1, 0, 0], [0, 1, 0], [0.002, 0.001, 1]].\nAn instrument's tip and tail appear at pixels (250, 0) and (125, 250). Assume both lie in the calibrated plane."
+    },
+    {
+      "id": "practice_q07_a", "type": "essay", "title": "Q7(a) — Invert the surgical homography", "points": 3, "stimulusId": "practice_q07_context",
+      "prompt": "Write H^(-1) and verify your result.",
+      "solution": "H^(-1) = [[1, 0, 0], [0, 1, 0], [-0.002, -0.001, 1]]. Multiplying by H cancels the two off-diagonal entries in the third row, yielding I."
+    },
+    {
+      "id": "practice_q07_b_tip_x", "type": "numerical", "title": "Q7(b) — Tip X-coordinate", "points": 1, "stimulusId": "practice_q07_context",
+      "prompt": "Inverse-map the instrument tip. Enter X in millimetres.",
+      "numeric": {"mode": "exact", "value": 500, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "H^(-1)(250, 0, 1)^T = (250, 0, 0.5)^T. X = 250/0.5 = 500 mm."
+    },
+    {
+      "id": "practice_q07_b_tip_y", "type": "numerical", "title": "Q7(b) — Tip Y-coordinate", "points": 1, "stimulusId": "practice_q07_context",
+      "prompt": "Inverse-map the instrument tip. Enter Y in millimetres.",
+      "numeric": {"mode": "exact", "value": 0, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "The tip's homogeneous result is (250, 0, 0.5)^T. Y = 0/0.5 = 0 mm."
+    },
+    {
+      "id": "practice_q07_b_tail_x", "type": "numerical", "title": "Q7(b) — Tail X-coordinate", "points": 1, "stimulusId": "practice_q07_context",
+      "prompt": "Inverse-map the instrument tail. Enter X in millimetres.",
+      "numeric": {"mode": "exact", "value": 250, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "H^(-1)(125, 250, 1)^T = (125, 250, 0.5)^T. X = 125/0.5 = 250 mm."
+    },
+    {
+      "id": "practice_q07_b_tail_y", "type": "numerical", "title": "Q7(b) — Tail Y-coordinate", "points": 1, "stimulusId": "practice_q07_context",
+      "prompt": "Inverse-map the instrument tail. Enter Y in millimetres.",
+      "numeric": {"mode": "exact", "value": 500, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "The tail's homogeneous result is (125, 250, 0.5)^T. Y = 250/0.5 = 500 mm."
+    },
+    {
+      "id": "practice_q07_c_length", "type": "numerical", "title": "Q7(c) — Instrument length", "points": 1, "stimulusId": "practice_q07_context",
+      "prompt": "Calculate the instrument length in millimetres. Round to one decimal place.",
+      "numeric": {"mode": "exact", "value": 559.0169943749474, "tolerance": 0.1, "min": 0, "max": 0, "figures": 3},
+      "solution": "The endpoints are (500, 0) and (250, 500) mm. Length = sqrt((500-250)^2 + (0-500)^2) = sqrt(312500) = 559.01699... mm, or 559.0 mm."
+    },
+    {
+      "id": "practice_q07_c_errors", "type": "essay", "title": "Q7(c) — Measurement errors and calibration", "points": 2, "stimulusId": "practice_q07_context",
+      "prompt": "Give two reasons the measured length may be wrong by several millimetres in practice and one way to improve the four-point calibration.",
+      "solution": "Possible errors: inaccurate endpoint/calibration-point localisation; unmodelled lens distortion; instrument endpoints not lying in the calibrated plane. Improve calibration using more than four well-distributed reference points and an overdetermined least-squares fit (with outlier handling when appropriate)."
+    },
+    {
+      "id": "practice_q08_context", "type": "stimulus", "title": "Q8 — Shared pure-rotation camera data", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "K = [[800, 0, 320], [0, 800, 240], [0, 0, 1]]. The camera rotates about its centre with no translation. Use Ry(10 degrees) = [[cos(10°), 0, sin(10°)], [0, 1, 0], [-sin(10°), 0, cos(10°)]] for the mapping from image 1 rays to image 2 rays.\nThe image 1 principal point is (320, 240). Both views have the same K."
+    },
+    {
+      "id": "practice_q08_a", "type": "essay", "title": "Q8(a) — Pure rotation homography", "points": 2, "stimulusId": "practice_q08_context",
+      "prompt": "Give the formula for the homography H mapping image 1 to image 2.",
+      "solution": "H = K R K^(-1), where R is the stated rotation of image 1 rays into image 2 coordinates."
+    },
+    {
+      "id": "practice_q08_b_u", "type": "numerical", "title": "Q8(b) — Rotated principal point u", "points": 2, "stimulusId": "practice_q08_context",
+      "prompt": "Where does the image 1 principal point appear in image 2? Enter the u-coordinate in pixels, to one decimal place.",
+      "numeric": {"mode": "exact", "value": 461.061584566772, "tolerance": 0.1, "min": 0, "max": 0, "figures": 3},
+      "solution": "K^(-1)(320,240,1)^T = (0,0,1)^T. Rotation gives (sin(10°),0,cos(10°))^T. After projecting, u = 800 tan(10°) + 320 = 461.06158... px, or 461.1 px."
+    },
+    {
+      "id": "practice_q08_b_v", "type": "numerical", "title": "Q8(b) — Rotated principal point v", "points": 2, "stimulusId": "practice_q08_context",
+      "prompt": "Where does the image 1 principal point appear in image 2? Enter the v-coordinate in pixels.",
+      "numeric": {"mode": "exact", "value": 240, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "The rotated normalised ray has zero y component, so v = 800 × 0 + 240 = 240 px."
+    },
+    {
+      "id": "practice_q08_c", "type": "essay", "title": "Q8(c) — Why pure rotation gives no depth", "points": 2, "stimulusId": "practice_q08_context",
+      "prompt": "Why can depth not be recovered by triangulation from two images related by pure rotation about the camera centre?",
+      "solution": "The views share the same camera centre, so there is no translational baseline or parallax. H = K R K^(-1) has no depth term; points at different distances along the same ray transform identically."
+    },
+    {
+      "id": "practice_q09", "type": "essay", "title": "Q9 — Direct Linear Transform", "points": 10, "stimulusId": "",
+      "prompt": "(a) How many independent equations does each 3D–2D correspondence give for P, and what is the minimum number of points? [3 marks]\n(b) Explain how SVD solves A p = 0, and why normalising points helps. [3 marks]\n(c) Name one degenerate configuration of the 3D points and explain the effect. [2 marks]\n(d) How are K, R and t recovered from P = [M | p4]? [2 marks]",
+      "solution": "(a) Two equations per point; at least six non-degenerate 3D–2D correspondences for the 11 degrees of freedom of P.\n(b) Form a 2n × 12 matrix A. In A = U Σ V^T, choose the last column of V (smallest singular value) and reshape it to 3 × 4. Normalise centroids to zero and mean distances to sqrt(2) in 2D / sqrt(3) in 3D to improve conditioning; denormalise the resulting P.\n(c) All 3D points on a plane is degenerate for a general camera matrix: P is not uniquely determined.\n(d) RQ-decompose M = K R, enforce the chosen sign/scale conventions, then t = K^(-1) p4."
+    },
+    {
+      "id": "practice_q10", "type": "essay", "title": "Q10 — Essential matrix and epipolar lines", "points": 10, "stimulusId": "",
+      "prompt": "Two normalised cameras have R = I and translation direction t = (0, 0, 1)^T, representing motion along the optical axis. Use E = [t]× R.\n(a) Write E. [3 marks]\n(b) For x = (0.2, 0.1, 1)^T in image 1, compute the epipolar line l' = E x in image 2. [3 marks]\n(c) Where are the epipoles? What is distinctive about epipolar lines for this forward-motion geometry? [4 marks]",
+      "solution": "(a) E = [[0, -1, 0], [1, 0, 0], [0, 0, 0]], up to non-zero scale.\n(b) l' = (-0.1, 0.2, 0)^T, giving -0.1x' + 0.2y' = 0, or y' = 0.5x'.\n(c) Both epipoles are (0, 0, 1)^T, the principal point in normalised coordinates. Epipolar lines radiate through it rather than being parallel horizontal lines. Changing the sign of E does not change the lines."
+    },
+    {
+      "id": "practice_q11", "type": "essay", "title": "Q11 — Fundamental matrix", "points": 8, "stimulusId": "",
+      "prompt": "(a) State the epipolar constraint and the relation between the fundamental matrix F and essential matrix E. [3 marks]\n(b) Give the degrees of freedom of E and F and explain why det(F) = 0. Assume a non-zero stereo baseline. [3 marks]\n(c) How many correspondences does the linear 8-point algorithm need, and which step enforces rank 2? [2 marks]",
+      "solution": "(a) x'^T F x = 0 for corresponding pixel points. F = K'^(-T) E K^(-1), equivalently E = K'^T F K.\n(b) E has 5 degrees of freedom: 3 for rotation and 2 for translation direction up to scale. F has 7: 9 entries minus scale and the determinant constraint. Its epipolar construction includes a rank-2 skew-symmetric factor, so det(F) = 0.\n(c) At least 8 correspondences. After SVD of the estimate, set its smallest singular value to zero and reconstruct F."
+    },
+    {
+      "id": "practice_q12", "type": "essay", "title": "Q12 — Rectification and triangulation", "points": 8, "stimulusId": "",
+      "prompt": "(a) What does standard horizontal stereo rectification do to the epipolar lines and epipoles? [3 marks]\n(b) Why does this reduce stereo matching to a 1D search? [2 marks]\n(c) Four (R, t) decompositions of E exist. How is the physically correct one selected using chirality? [3 marks]",
+      "solution": "(a) Corresponding epipolar lines become horizontal and aligned by image row; epipoles lie at infinity along the horizontal direction, (1, 0, 0)^T.\n(b) Correspondences are on the same row, leaving only a horizontal displacement to search.\n(c) The four candidates are (R1, ±t) and (R2, ±t). Triangulate correspondences and choose the candidate putting points in front of both cameras, with positive camera-frame depth."
+    },
+    {
+      "id": "practice_q13_context", "type": "stimulus", "title": "Q13 — Shared stereo rig (stimulus example)", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "Use this same setup for all linked Q13 questions:\nA rectified stereo rig has focal length f = 1000 pixels and baseline B = 0.2 metres.\nDisparity is measured in pixels and depth in metres."
+    },
+    {
+      "id": "practice_q13_a_40", "type": "numerical", "title": "Q13(a) — Depth at disparity 40 px", "points": 1, "stimulusId": "practice_q13_context",
+      "prompt": "Calculate the depth for disparity d = 40 px. Enter metres as a number only.",
+      "numeric": {"mode": "exact", "value": 5, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "Z = fB/d = 1000 × 0.2 / 40 = 5 m."
+    },
+    {
+      "id": "practice_q13_a_25", "type": "numerical", "title": "Q13(a) — Depth at disparity 25 px", "points": 1, "stimulusId": "practice_q13_context",
+      "prompt": "Calculate the depth for disparity d = 25 px. Enter metres as a number only.",
+      "numeric": {"mode": "exact", "value": 8, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "Z = fB/d = 1000 × 0.2 / 25 = 8 m."
+    },
+    {
+      "id": "practice_q13_a_10", "type": "numerical", "title": "Q13(a) — Depth at disparity 10 px", "points": 1, "stimulusId": "practice_q13_context",
+      "prompt": "Calculate the depth for disparity d = 10 px. Enter metres as a number only.",
+      "numeric": {"mode": "exact", "value": 20, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "Z = fB/d = 1000 × 0.2 / 10 = 20 m."
+    },
+    {
+      "id": "practice_q13_b", "type": "numerical", "title": "Q13(b) — Depth precision at 20 m", "points": 3, "stimulusId": "practice_q13_context",
+      "prompt": "At Z = 20 m, estimate the magnitude of the depth uncertainty for a disparity error of ±1 px. Use first-order error propagation and enter the positive uncertainty in metres.",
+      "numeric": {"mode": "exact", "value": 2, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "|ΔZ| ≈ Z^2 |Δd| / (fB) = 20^2 × 1 / (1000 × 0.2) = 2 m. The exact errors at disparities 9 and 11 px are asymmetric; this question asks for the first-order approximation."
+    },
+    {
+      "id": "practice_q13_c", "type": "essay", "title": "Q13(c) — Doubling the baseline", "points": 2, "stimulusId": "practice_q13_context",
+      "prompt": "If the baseline is doubled, explain the effects on range, depth precision and matching difficulty.",
+      "solution": "At a fixed disparity the measurable depth doubles. At fixed depth and disparity-error magnitude, uncertainty halves (2 m becomes 1 m at Z = 20 m). Larger baseline increases disparities and required search range, can increase occlusions, and reduces overlap at close range."
+    },
+    {
+      "id": "practice_q14_context", "type": "stimulus", "title": "Q14 — Shared block-matching windows", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "The 3 × 3 left window is L = [[10, 20, 30], [40, 50, 60], [70, 80, 90]].\nThe candidate right windows are:\nR0 = [[12, 22, 28], [38, 52, 61], [72, 79, 93]];\nR1 = [[50, 60, 70], [80, 90, 100], [10, 20, 30]].\nSAD sums absolute pixel differences. SSD sums squared pixel differences."
+    },
+    {
+      "id": "practice_q14_a_sad0", "type": "numerical", "title": "Q14(a) — SAD for R0", "points": 1, "stimulusId": "practice_q14_context",
+      "prompt": "Calculate SAD(L, R0). Enter an integer.",
+      "numeric": {"mode": "exact", "value": 17, "tolerance": 0, "min": 0, "max": 0, "figures": 3},
+      "solution": "Absolute differences: [[2,2,2],[2,2,1],[2,1,3]]. Their sum is 17."
+    },
+    {
+      "id": "practice_q14_a_ssd0", "type": "numerical", "title": "Q14(a) — SSD for R0", "points": 1, "stimulusId": "practice_q14_context",
+      "prompt": "Calculate SSD(L, R0). Enter an integer.",
+      "numeric": {"mode": "exact", "value": 35, "tolerance": 0, "min": 0, "max": 0, "figures": 3},
+      "solution": "Squared differences: [[4,4,4],[4,4,1],[4,1,9]]. Their sum is 35."
+    },
+    {
+      "id": "practice_q14_a_sad1", "type": "numerical", "title": "Q14(a) — SAD for R1", "points": 1, "stimulusId": "practice_q14_context",
+      "prompt": "Calculate SAD(L, R1). Enter an integer.",
+      "numeric": {"mode": "exact", "value": 420, "tolerance": 0, "min": 0, "max": 0, "figures": 3},
+      "solution": "Six absolute differences are 40 and three are 60. SAD = 6 × 40 + 3 × 60 = 420."
+    },
+    {
+      "id": "practice_q14_a_ssd1", "type": "numerical", "title": "Q14(a) — SSD for R1", "points": 1, "stimulusId": "practice_q14_context",
+      "prompt": "Calculate SSD(L, R1). Enter an integer.",
+      "numeric": {"mode": "exact", "value": 20400, "tolerance": 0, "min": 0, "max": 0, "figures": 3},
+      "solution": "SSD = 6 × 40^2 + 3 × 60^2 = 9600 + 10800 = 20400."
+    },
+    {
+      "id": "practice_q14_b", "type": "essay", "title": "Q14(b) — Winner-takes-all selection", "points": 2, "stimulusId": "practice_q14_context",
+      "prompt": "Which candidate's disparity is selected by winner-takes-all? Explain using the costs.",
+      "solution": "Choose the disparity corresponding to R0 because it minimises both SAD (17 < 420) and SSD (35 < 20400). The actual pixel displacement is not specified; the answer is the R0 candidate."
+    },
+    {
+      "id": "practice_q14_c", "type": "essay", "title": "Q14(c) — SSD and outliers", "points": 2, "stimulusId": "practice_q14_context",
+      "prompt": "Why are SSD costs more sensitive to outliers than SAD costs?",
+      "solution": "SSD squares residuals, so one large mismatch can dominate the sum. SAD grows only linearly with residual magnitude. Specular highlights or occlusion can create such large residuals."
+    },
+    {
+      "id": "practice_q14_d", "type": "essay", "title": "Q14(d) — Window-matching failure cases", "points": 2, "stimulusId": "practice_q14_context",
+      "prompt": "Name two image conditions in which this local window-matching approach can fail, and briefly explain why.",
+      "solution": "Textureless regions give a flat or ambiguous cost curve. Repeating patterns give several similar minima. Occlusions, depth discontinuities and brightness differences can also violate the matching assumptions. Any two appropriate explanations."
+    },
+    {
+      "id": "practice_q15", "type": "essay", "title": "Q15 — Local versus global stereo methods", "points": 10, "stimulusId": "",
+      "prompt": "(a) Explain the effect of window size on accuracy at depth edges and in low-texture regions. [3 marks]\n(b) What do the smoothness penalties P1 and P2 add in scanline/semi-global methods? [3 marks]\n(c) Describe a left–right consistency check and which pixels it rejects. [2 marks]\n(d) A flat wall with a repeating tile pattern is labelled at the wrong depth. Diagnose the problem and suggest two remedies. [2 marks]",
+      "solution": "(a) Small windows preserve sharper boundaries but are noisy/ambiguous in weak texture. Larger windows add support but mix depths and blur/fatten boundaries.\n(b) P1 penalises a disparity change of one; P2 penalises larger changes, usually more strongly. Smoothness encourages coherent surfaces while balancing evidence for real depth changes.\n(c) Match in both directions. With a consistent positive-disparity convention, reject where |dL(x) - dR(x - dL(x))| exceeds a tolerance (often 1 px). These are commonly occlusions or mismatches.\n(d) Repeated texture creates ambiguous periodic matches. Remedies include a suitable larger support region, SGM/global constraints, a physically justified search range, added texture/structured light, or a consistency check. A consistency check does not guarantee removal of mutually consistent wrong matches."
+    },
+    {
+      "id": "practice_q16_context", "type": "stimulus", "title": "Q16 — Shared checkerboard calibration data", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "A planar checkerboard lies on Zw = 0, with board coordinates in millimetres.\nK = [[1000, 0, 500], [0, 1000, 400], [0, 0, 1]].\nR = [[1, 0, 0], [0, 0.8, -0.6], [0, 0.6, 0.8]].\nt = (0, 50, 1000)^T mm.\nThe board-to-image homography is H = K[r1 | r2 | t], where r1 and r2 are the first two columns of R. The board corner to project is (100, 100) mm."
+    },
+    {
+      "id": "practice_q16_a", "type": "essay", "title": "Q16(a) — Checkerboard homography", "points": 4, "stimulusId": "practice_q16_context",
+      "prompt": "Calculate the 3 × 3 homography H = K[r1 | r2 | t], relating (X, Y, 1)^T on the board to image pixels (u, v, 1)^T up to scale. Show the matrix multiplication.",
+      "solution": "K r1 = (1000, 0, 0)^T; K r2 = (300, 1040, 0.6)^T; K t = (500000, 450000, 1000)^T.\nH = [[1000, 300, 500000], [0, 1040, 450000], [0, 0.6, 1000]].\nAn equivalent scaled matrix is [[1, 0.3, 500], [0, 1.04, 450], [0, 0.0006, 1]]."
+    },
+    {
+      "id": "practice_q16_b_u", "type": "numerical", "title": "Q16(b) — Checkerboard corner u", "points": 1.5, "stimulusId": "practice_q16_context",
+      "prompt": "Project the checkerboard corner. Enter u in pixels, to one decimal place.",
+      "numeric": {"mode": "exact", "value": 594.3396226415094, "tolerance": 0.1, "min": 0, "max": 0, "figures": 3},
+      "solution": "Using H scaled by 1/1000, H(100,100,1)^T = (630,554,1.06)^T. u = 630/1.06 = 594.3396... px, or 594.3 px."
+    },
+    {
+      "id": "practice_q16_b_v", "type": "numerical", "title": "Q16(b) — Checkerboard corner v", "points": 1.5, "stimulusId": "practice_q16_context",
+      "prompt": "Project the checkerboard corner. Enter v in pixels, to one decimal place.",
+      "numeric": {"mode": "exact", "value": 522.6415094339623, "tolerance": 0.1, "min": 0, "max": 0, "figures": 3},
+      "solution": "The homogeneous image point is (630,554,1.06)^T. v = 554/1.06 = 522.6415... px, or 522.6 px."
+    },
+    {
+      "id": "practice_q16_c", "type": "essay", "title": "Q16(c) — Zhang's two constraints", "points": 3, "stimulusId": "practice_q16_context",
+      "prompt": "For the first two columns h1 and h2 of H, explain the geometric origin of:\nh1^T K^(-T) K^(-1) h2 = 0,\nand\nh1^T K^(-T) K^(-1) h1 = h2^T K^(-T) K^(-1) h2.",
+      "solution": "Up to a common scale λ, h1 = λ K r1 and h2 = λ K r2. The first constraint follows from r1 and r2 being orthogonal. The second follows from their equal unit lengths. These are properties of the first two columns of a rotation matrix."
+    },
+    {
+      "id": "practice_q17_context", "type": "stimulus", "title": "Q17 — Shared fundamental matrix and feature", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "A stereo rig has fundamental matrix F = [[0, 0, 0], [0, 0, -0.04], [0, 0.04, 0]].\nThe Image 1 point is x = (250, 200, 1)^T.\nCandidate Image 2 points are x'A = (180, 200, 1)^T and x'B = (180, 210, 1)^T."
+    },
+    {
+      "id": "practice_q17_a_det", "type": "numerical", "title": "Q17(a) — Determinant of F", "points": 0.5, "stimulusId": "practice_q17_context",
+      "prompt": "Evaluate det(F).",
+      "numeric": {"mode": "exact", "value": 0, "tolerance": 0, "min": 0, "max": 0, "figures": 3},
+      "solution": "The first row is zero, so det(F) = 0."
+    },
+    {
+      "id": "practice_q17_a_rank", "type": "numerical", "title": "Q17(a) — Rank of F", "points": 0.5, "stimulusId": "practice_q17_context",
+      "prompt": "State the rank of F. Enter an integer.",
+      "numeric": {"mode": "exact", "value": 2, "tolerance": 0, "min": 0, "max": 0, "figures": 3},
+      "solution": "Rows 2 and 3 are non-zero and independent, while row 1 is zero. Therefore rank(F) = 2."
+    },
+    {
+      "id": "practice_q17_a_verify", "type": "essay", "title": "Q17(a) — Verify determinant and rank", "points": 1, "stimulusId": "practice_q17_context",
+      "prompt": "Show why the determinant is zero and justify the rank using the matrix's rows or columns.",
+      "solution": "The zero first row forces determinant zero. Rows (0,0,-0.04) and (0,0.04,0) are linearly independent; therefore the rank is exactly 2, not merely at most 2."
+    },
+    {
+      "id": "practice_q17_b", "type": "essay", "title": "Q17(b) — Epipole at infinity", "points": 3, "stimulusId": "practice_q17_context",
+      "prompt": "Find e' satisfying F^T e' = 0. Show that it lies at infinity and explain the implication for the epipolar geometry.",
+      "solution": "For e' = (a,b,c)^T, F^T e' = 0 gives 0.04c = 0 and -0.04b = 0. Thus e' = (1,0,0)^T up to scale. Its last coordinate is zero: it is at horizontal infinity, so epipolar lines are parallel and horizontal (rectified-type geometry). F alone does not uniquely establish the physical camera pose or calibration."
+    },
+    {
+      "id": "practice_q17_c", "type": "essay", "title": "Q17(c) — Algebraic epipolar line", "points": 3, "stimulusId": "practice_q17_context",
+      "prompt": "Determine l' = F x = (a,b,c)^T and write the algebraic equation of the corresponding epipolar line in Image 2.",
+      "solution": "F(250,200,1)^T = (0,-0.04,8)^T. Therefore -0.04v' + 8 = 0, or v' = 200. An equivalent line vector is (0,1,-200)^T."
+    },
+    {
+      "id": "practice_q17_d", "type": "essay", "title": "Q17(d) — Test point incidence", "points": 2, "stimulusId": "practice_q17_context",
+      "prompt": "Test whether candidate A or B lies on the epipolar line corresponding to x. Show the incidence calculation for each candidate.",
+      "solution": "The line is v' = 200. Using (0,1,-200), A gives 200-200 = 0 and lies on the line. B gives 210-200 = 10 and does not. Using unnormalised F x gives 0 and -0.4 respectively; both scalings are valid."
+    },
+    {
+      "id": "practice_q18_context", "type": "stimulus", "title": "Q18 — Shared calibrated stereo geometry", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "Both cameras have K = I and relative orientation R = I. Camera 2's centre in Camera 1 coordinates is t = (0.2, 0, 0)^T metres, so a point transforms as P2 = R^T(P1 - t).\nThe observed normalised image points are x1 = (0.10, 0.05, 1)^T and x2 = (0.06, 0.05, 1)^T.\nFor this R = I case, use the essential-matrix representative E = [t]×R. E and -E encode the same epipolar constraint."
+    },
+    {
+      "id": "practice_q18_a", "type": "essay", "title": "Q18(a) — Skew matrix and essential matrix", "points": 3, "stimulusId": "practice_q18_context",
+      "prompt": "Construct the skew-symmetric matrix [t]× and compute E = [t]×R.",
+      "solution": "[t]× = [[0,0,0],[0,0,-0.2],[0,0.2,0]]. Since R = I, this is also the requested representative of E. With the standard world-to-camera translation -t, the essential matrix has the opposite sign, which is projectively equivalent."
+    },
+    {
+      "id": "practice_q18_b_value", "type": "numerical", "title": "Q18(b) — Epipolar constraint value", "points": 1, "stimulusId": "practice_q18_context",
+      "prompt": "Evaluate the scalar x2^T E x1.",
+      "numeric": {"mode": "exact", "value": 0, "tolerance": 0.000001, "min": 0, "max": 0, "figures": 3},
+      "solution": "E x1 = (0,-0.2,0.01)^T. Dotting with x2 gives 0.06×0 + 0.05×(-0.2) + 1×0.01 = 0."
+    },
+    {
+      "id": "practice_q18_b_verify", "type": "essay", "title": "Q18(b) — Verify the epipolar constraint", "points": 2, "stimulusId": "practice_q18_context",
+      "prompt": "Show the multiplication E x1 and then x2^T E x1 to verify the epipolar constraint.",
+      "solution": "E x1 = (0,-0.2,0.01)^T. Then x2^T E x1 = 0 - 0.01 + 0.01 = 0. The image points satisfy the epipolar constraint."
+    },
+    {
+      "id": "practice_q18_c_x", "type": "numerical", "title": "Q18(c) — Triangulated X", "points": 0.5, "stimulusId": "practice_q18_context",
+      "prompt": "Triangulate the point. Enter its X-coordinate in metres relative to Camera 1.",
+      "numeric": {"mode": "exact", "value": 0.5, "tolerance": 0.001, "min": 0, "max": 0, "figures": 3},
+      "solution": "Normalised disparity d = 0.10-0.06 = 0.04. Z = 0.2/0.04 = 5 m; X = 0.10×5 = 0.5 m."
+    },
+    {
+      "id": "practice_q18_c_y", "type": "numerical", "title": "Q18(c) — Triangulated Y", "points": 0.5, "stimulusId": "practice_q18_context",
+      "prompt": "Triangulate the point. Enter its Y-coordinate in metres relative to Camera 1.",
+      "numeric": {"mode": "exact", "value": 0.25, "tolerance": 0.001, "min": 0, "max": 0, "figures": 3},
+      "solution": "Z = 0.2/(0.10-0.06) = 5 m. Y = 0.05×5 = 0.25 m."
+    },
+    {
+      "id": "practice_q18_c_z", "type": "numerical", "title": "Q18(c) — Triangulated Z", "points": 1, "stimulusId": "practice_q18_context",
+      "prompt": "Triangulate the point. Enter its Z-coordinate in metres relative to Camera 1.",
+      "numeric": {"mode": "exact", "value": 5, "tolerance": 0.001, "min": 0, "max": 0, "figures": 3},
+      "solution": "For normalised coordinates f = 1. Z = B/(x1-x2) = 0.2/(0.10-0.06) = 5 m."
+    },
+    {
+      "id": "practice_q18_c_chirality", "type": "essay", "title": "Q18(c) — Verify chirality", "points": 2, "stimulusId": "practice_q18_context",
+      "prompt": "Verify that the triangulated point has positive depth in both cameras. Show the point in both camera coordinate systems.",
+      "solution": "P1 = (0.5,0.25,5) m. P2 = P1-t = (0.3,0.25,5) m. Z1 = Z2 = 5 > 0, so the point lies in front of both cameras."
+    },
+    {
+      "id": "practice_q19_context", "type": "stimulus", "title": "Q19 — Shared vehicle stereo specifications", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "An autonomous vehicle's stereo camera has f = 1500 pixels, baseline B = 0.40 m, and sensor resolution 1920 × 1080 pixels.\nFor depth uncertainty, use the first-order relation |ΔZ| ≈ Z^2 |Δd|/(fB). The disparity-error magnitude is 0.5 px where specified."
+    },
+    {
+      "id": "practice_q19_a", "type": "numerical", "title": "Q19(a) — Pedestrian distance", "points": 2, "stimulusId": "practice_q19_context",
+      "prompt": "A pedestrian produces disparity d = 30.0 px. Calculate the distance Z in metres.",
+      "numeric": {"mode": "exact", "value": 20, "tolerance": 0.01, "min": 0, "max": 0, "figures": 3},
+      "solution": "Z = fB/d = 1500×0.40/30 = 20 m."
+    },
+    {
+      "id": "practice_q19_b_10", "type": "numerical", "title": "Q19(b) — Uncertainty at 10 m", "points": 2, "stimulusId": "practice_q19_context",
+      "prompt": "For disparity error Δd = ±0.5 px, calculate the depth-uncertainty magnitude at Z = 10.0 m. Enter metres, to three decimal places.",
+      "numeric": {"mode": "exact", "value": 0.08333333333333333, "tolerance": 0.0005, "min": 0, "max": 0, "figures": 3},
+      "solution": "|ΔZ| ≈ 10^2×0.5/(1500×0.40) = 100/1200 = 0.083333... m, or 0.083 m."
+    },
+    {
+      "id": "practice_q19_b_40", "type": "numerical", "title": "Q19(b) — Uncertainty at 40 m", "points": 2, "stimulusId": "practice_q19_context",
+      "prompt": "For disparity error Δd = ±0.5 px, calculate the depth-uncertainty magnitude at Z = 40.0 m. Enter metres, to two decimal places.",
+      "numeric": {"mode": "exact", "value": 1.3333333333333333, "tolerance": 0.005, "min": 0, "max": 0, "figures": 3},
+      "solution": "|ΔZ| ≈ 40^2×0.5/(1500×0.40) = 1600/1200 = 1.33333... m, or 1.33 m."
+    },
+    {
+      "id": "practice_q19_c", "type": "numerical", "title": "Q19(c) — Minimum baseline", "points": 4, "stimulusId": "practice_q19_context",
+      "prompt": "The braking system requires |ΔZ| ≤ 1.5 m at Z = 30.0 m. With f = 1500 px and |Δd| = 0.5 px unchanged, determine the minimum required baseline in metres.",
+      "numeric": {"mode": "exact", "value": 0.2, "tolerance": 0.0005, "min": 0, "max": 0, "figures": 3},
+      "solution": "Z^2 |Δd|/(fB) ≤ 1.5 implies B ≥ Z^2 |Δd|/(1.5f) = 900×0.5/(1.5×1500) = 0.20 m. This is the minimum; the given 0.40 m baseline already exceeds it."
+    },
+    {
+      "id": "practice_q20_context", "type": "stimulus", "title": "Q20 — Shared DLT projection matrix", "points": 0, "stimulusId": "", "solution": "",
+      "prompt": "DLT yields P = [[800, 0, 320, -1600], [0, 800, 240, -1200], [0, 0, 1, -5]].\nUse P = K[R | t] and denote its left 3 × 3 submatrix by M and its last column by p4.\nPositions and translations are in the unspecified world-coordinate units used by P; focal lengths and principal-point coordinates are in pixels."
+    },
+    {
+      "id": "practice_q20_a_x", "type": "numerical", "title": "Q20(a) — Optical centre X0", "points": 1, "stimulusId": "practice_q20_context",
+      "prompt": "Solve P(X0,Y0,Z0,1)^T = 0. Enter X0 in world-coordinate units.",
+      "numeric": {"mode": "exact", "value": 0, "tolerance": 0.000001, "min": 0, "max": 0, "figures": 3},
+      "solution": "Row 3 gives Z0 = 5. Row 1 gives 800X0 + 320×5 - 1600 = 0, so X0 = 0."
+    },
+    {
+      "id": "practice_q20_a_y", "type": "numerical", "title": "Q20(a) — Optical centre Y0", "points": 1, "stimulusId": "practice_q20_context",
+      "prompt": "Solve P(X0,Y0,Z0,1)^T = 0. Enter Y0 in world-coordinate units.",
+      "numeric": {"mode": "exact", "value": 0, "tolerance": 0.000001, "min": 0, "max": 0, "figures": 3},
+      "solution": "Row 3 gives Z0 = 5. Row 2 gives 800Y0 + 240×5 - 1200 = 0, so Y0 = 0."
+    },
+    {
+      "id": "practice_q20_a_z", "type": "numerical", "title": "Q20(a) — Optical centre Z0", "points": 2, "stimulusId": "practice_q20_context",
+      "prompt": "Solve P(X0,Y0,Z0,1)^T = 0. Enter Z0 in world-coordinate units.",
+      "numeric": {"mode": "exact", "value": 5, "tolerance": 0.000001, "min": 0, "max": 0, "figures": 3},
+      "solution": "The last row of P(X0,Y0,Z0,1)^T = 0 is Z0 - 5 = 0. Thus Z0 = 5 and Cw = (0,0,5)."
+    },
+    {
+      "id": "practice_q20_b", "type": "essay", "title": "Q20(b) — Intrinsic and rotation decomposition", "points": 3, "stimulusId": "practice_q20_context",
+      "prompt": "Decompose M into K R, using positive focal lengths and K33 = 1. State K, R, the focal lengths, principal point and Euler rotation angles.",
+      "solution": "M is already upper triangular with positive diagonal: K = [[800,0,320],[0,800,240],[0,0,1]] and R = I.\nfx = fy = 800 px; (cx,cy) = (320,240) px. Euler rotation angles are all zero."
+    },
+    {
+      "id": "practice_q20_c_tx", "type": "numerical", "title": "Q20(c) — Translation tx", "points": 0.5, "stimulusId": "practice_q20_context",
+      "prompt": "Solve p4 = Kt. Enter tx in world-coordinate units.",
+      "numeric": {"mode": "exact", "value": 0, "tolerance": 0.000001, "min": 0, "max": 0, "figures": 3},
+      "solution": "tz = -5. Row 1 gives 800tx + 320(-5) = -1600, so tx = 0."
+    },
+    {
+      "id": "practice_q20_c_ty", "type": "numerical", "title": "Q20(c) — Translation ty", "points": 0.5, "stimulusId": "practice_q20_context",
+      "prompt": "Solve p4 = Kt. Enter ty in world-coordinate units.",
+      "numeric": {"mode": "exact", "value": 0, "tolerance": 0.000001, "min": 0, "max": 0, "figures": 3},
+      "solution": "tz = -5. Row 2 gives 800ty + 240(-5) = -1200, so ty = 0."
+    },
+    {
+      "id": "practice_q20_c_tz", "type": "numerical", "title": "Q20(c) — Translation tz", "points": 0.5, "stimulusId": "practice_q20_context",
+      "prompt": "Solve p4 = Kt. Enter tz in world-coordinate units.",
+      "numeric": {"mode": "exact", "value": -5, "tolerance": 0.000001, "min": 0, "max": 0, "figures": 3},
+      "solution": "The third row of Kt = p4 directly gives tz = -5. Thus t = (0,0,-5)."
+    },
+    {
+      "id": "practice_q20_c_verify", "type": "essay", "title": "Q20(c) — Verify the optical centre", "points": 1.5, "stimulusId": "practice_q20_context",
+      "prompt": "Using the recovered R and t, verify Cw = -R^T t and check that its homogeneous vector lies in the null space of P.",
+      "solution": "R = I and t = (0,0,-5), so -R^T t = (0,0,5) = Cw. Multiplying P by (0,0,5,1)^T gives (1600-1600,1200-1200,5-5)^T = (0,0,0)^T."
+    }
+  ]
+}
