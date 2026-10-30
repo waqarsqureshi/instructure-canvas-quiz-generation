@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Quiz Studio | Canvas authoring</title>
+  <style>:root{--plum:#50243d;--plum-dark:#351828;--teal:#006b68;--cream:#f6f3ef;--ink:#252c35;--muted:#626a72;--line:#dedbd6;--white:#fff;--danger:#a22235}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{border:1px solid var(--line);border-radius:7px;background:white;color:var(--ink);padding:.55rem .85rem;cursor:pointer;font-weight:600}button:hover{background:#eee9e5}button:disabled{opacity:.5;cursor:not-allowed}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #d6a64c;outline-offset:2px}.primary{background:var(--teal);color:white;border-color:var(--teal)}.primary:hover{background:#005451}.danger{color:var(--danger)}.full{width:100%}.spacer{flex:1}
+.masthead{background:var(--plum);color:white;padding:1.55rem 2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}.eyebrow{font-size:.72rem;letter-spacing:.13em;font-weight:700;color:#e8cfdc}h1{font-size:2rem;letter-spacing:-.04em;margin:.15rem 0}.masthead p{margin:0;color:#eadde5}.offline{font-size:.8rem;border:1px solid #93677f;border-radius:20px;padding:.45rem .8rem}.offline span{color:#8fdbbf}
+.toolbar{display:flex;gap:.45rem;flex-wrap:wrap;padding:.8rem 2rem;border-bottom:1px solid var(--line);background:white}.bank-settings{display:flex;align-items:flex-end;gap:1.2rem;padding:1.2rem 2rem;background:#fff}.bank-title{flex:1}.bank-settings label{margin:0;min-width:220px}.summary{min-width:125px;color:var(--muted);font-size:.85rem;padding-bottom:.6rem}label{display:block;font-size:.88rem;font-weight:650;margin-bottom:1rem}input[type=text],input[type=number],textarea,select{width:100%;display:block;border:1px solid #bdbab6;border-radius:6px;padding:.6rem;background:white;color:var(--ink);margin-top:.35rem}textarea{resize:vertical;min-height:80px;line-height:1.55}input[type=checkbox],input[type=radio]{accent-color:var(--teal);width:18px;height:18px;flex-shrink:0}.hint{font-size:.82rem;color:var(--muted);font-weight:400;margin:.35rem 0 1rem}.check{display:flex;gap:.55rem;align-items:flex-start;font-weight:500}.check input{margin-top:.2rem}
+#status{font-size:.85rem;padding:.45rem 2rem;color:var(--muted);min-height:2rem}#status.error{color:var(--danger);background:#fff0f1}.workspace{display:grid;grid-template-columns:280px minmax(0,1fr);gap:1.25rem;padding:0 2rem 2rem;max-width:1600px;margin:auto}.sidebar{background:white;border:1px solid var(--line);border-radius:10px;padding:1rem;align-self:start;position:sticky;top:1rem;max-height:calc(100vh - 2rem);overflow:auto}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.6rem}h2{font-size:1.15rem;margin:0}h3{font-size:1rem;margin:1.3rem 0 .7rem}.badge{display:inline-block;background:#eeebe8;color:var(--muted);border-radius:5px;font-size:.72rem;padding:.2rem .45rem}.sidebar label{font-size:.8rem}.sidebar-tip{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:1rem}
+#question-list{display:flex;flex-direction:column;gap:.45rem;margin-top:1rem}.question-link{text-align:left;width:100%;font-size:.86rem;font-weight:500;padding:.65rem;overflow-wrap:anywhere}.question-link small{display:block;color:var(--muted);font-size:.72rem;margin-top:.15rem}.question-link.active{border-color:var(--teal);box-shadow:inset 3px 0 var(--teal);background:#ecf6f4}.question-link.invalid{border-right:4px solid #d28e4b}main{min-width:0}#editor,.preview-card{background:white;border:1px solid var(--line);border-radius:10px;padding:1.5rem}.preview-card{margin-top:1rem;border-top:3px solid var(--teal)}.empty{text-align:center;padding:4rem 1rem;color:var(--muted)}.empty h2{color:var(--plum);font-size:1.5rem}.question-actions{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1.25rem}.question-actions select{width:auto;margin:0}.columns{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:1rem}.field-panel{border:1px solid var(--line);border-radius:8px;padding:1rem;margin-bottom:1rem;background:#fcfbfa}.field-panel h3{margin-top:0}.rows{display:flex;flex-direction:column;gap:.5rem}.row{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}.row>input[type=text],.row>input[type=number],.row>textarea{flex:1;min-width:50px;margin:0}.row>label{margin:0;font-size:.78rem;flex:1}.row>.correct{display:flex;gap:.3rem;align-items:center;flex:0 0 85px}.row button{padding:.35rem .5rem;font-size:.8rem}.row-index{color:var(--muted);min-width:20px}.notice{background:#fff7e6;border-left:4px solid #c99435;padding:.85rem 1rem;margin-bottom:1rem;font-size:.85rem}.notice ul{padding-left:1.2rem}.issues{border:1px solid #d98b94;background:#fff2f3;padding:1rem;border-radius:8px;margin-bottom:1rem;color:#801f2e}.issues ul{margin:.5rem 0;padding-left:1.3rem}.issues button{margin-left:.5rem}
+.preview-text{white-space:pre-wrap;overflow-wrap:anywhere}.preview-choices{list-style:none;padding-left:0}.preview-choices li{padding:.35rem 0}.preview-answer{border:1px dashed #aaa;border-radius:5px;padding:.7rem;color:#777}.preview-context{background:#f0f3f5;border-left:3px solid #9aabb7;padding:.8rem;margin-bottom:1rem}.hotspot-stage{position:relative;display:inline-block;max-width:100%;touch-action:none;line-height:0;cursor:crosshair;margin:.7rem 0}.hotspot-stage img{max-width:100%;height:auto;max-height:500px;display:block}.hotspot-rect{position:absolute;background:#008b8a33;border:2px solid #006b68;pointer-events:none}.image-coordinates{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}.image-coordinates label{font-size:.8rem}
+dialog{border:none;border-radius:12px;width:min(760px,94vw);padding:1.5rem;box-shadow:0 12px 70px #0005;max-height:90vh;overflow:auto}dialog::backdrop{background:#211b24aa}.dialog-actions{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.25rem}.steps li{margin:.6rem 0}.references{padding-left:1.2rem}.references li{margin:.6rem 0}a{color:var(--teal)}footer{text-align:center;color:var(--muted);font-size:.75rem;padding:1.5rem;border-top:1px solid var(--line)}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:900px){.workspace{grid-template-columns:220px minmax(0,1fr);padding:0 1rem 1rem}.masthead,.toolbar,.bank-settings{padding:1rem}.offline{display:none}.bank-settings{flex-wrap:wrap}.bank-settings .summary{width:100%;padding:0}.row{flex-wrap:wrap}.row>label{min-width:80px}#editor{padding:1rem}}
+@media(max-width:650px){.workspace{display:block}.sidebar{position:static;max-height:none;margin-bottom:1rem}#question-list{max-height:220px;overflow:auto}.sidebar-tip{display:none}.columns{grid-template-columns:1fr}.toolbar button{font-size:.82rem}.bank-settings label{min-width:100%;width:100%}.question-actions{gap:.3rem}.image-coordinates{grid-template-columns:1fr 1fr}.masthead p{font-size:.85rem}}
+</style>
+</head>
+<body>
+  <header class="masthead">
+    <div><span class="eyebrow">UNIVERSITY OF GALWAY · TEACHING TOOLS</span><h1>Quiz Studio</h1>
+      <p>Write once. Build a question bank. Export for Canvas.</p></div>
+    <div class="offline"><span aria-hidden="true">●</span> Offline · No uploads · No server</div>
+  </header>
+  <nav class="toolbar" aria-label="Project actions">
+    <button id="new-project">New bank</button>
+    <button id="load-example">Load example</button>
+    <button id="load-project" title="Open a .quiz.json file from local-json">Open project</button>
+    <button id="save-project" title="Download an editable .quiz.json file; save it in local-json">Save project</button>
+    <span class="spacer"></span>
+    <button id="help-open">Help &amp; references</button>
+    <button id="validate">Validate</button>
+    <button id="export" class="primary">Export Canvas ZIP</button>
+  </nav>
+  <input id="project-file" type="file" accept=".json,application/json" hidden>
+  <section class="bank-settings" aria-label="Bank settings">
+    <label class="bank-title">Bank title<input id="bank-title" type="text" maxlength="200"></label>
+    <label>Export target<select id="target"><option value="new">New Quizzes · portable QTI 2.1</option>
+      <option value="classic">Classic Quizzes · QTI 1.2</option></select></label>
+    <div id="summary" class="summary"></div>
+  </section>
+  <div id="status" role="status" aria-live="polite"></div>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="Question list">
+      <div class="section-heading"><h2>Questions</h2><span id="question-count" class="badge">0</span></div>
+      <label>Add a question<select id="add-type"></select></label>
+      <button id="add-question" class="primary full">+ Add question</button>
+      <div id="question-list"></div>
+      <p class="sidebar-tip">Tip: duplicate a question to reuse its settings. Save your project to keep editing later.</p>
+    </aside>
+    <main>
+      <div id="issues" class="issues" role="alert" hidden></div>
+      <section id="editor" aria-label="Question editor"></section>
+      <section id="preview-section" class="preview-card" hidden>
+        <div class="section-heading"><h2>Student preview</h2><span class="badge">Approximation</span></div>
+        <p class="hint">Layout and grading controls may differ after Canvas import.</p>
+        <div id="preview"></div>
+      </section>
+    </main>
+  </div>
+  <dialog id="export-dialog" aria-labelledby="export-title">
+    <div class="section-heading"><h2 id="export-title">Review your export</h2><button data-close="export-dialog" aria-label="Close export">✕</button></div>
+    <p id="export-summary"></p>
+    <p>Save the downloaded ZIP in the <strong>export</strong> folder. Import this ZIP into Canvas;
+      keep editable JSON projects separately in <strong>local-json</strong>.</p>
+    <div class="notice"><strong>Compatibility and privacy</strong><ul id="export-notices"></ul></div>
+    <label class="check"><input id="export-confirm" type="checkbox"> I have read these notes and will test the import in an unpublished Canvas quiz.</label>
+    <div class="dialog-actions"><button data-close="export-dialog">Cancel</button><button id="download-zip" class="primary" disabled>Download ZIP</button></div>
+  </dialog>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <div class="section-heading"><h2 id="help-title">A simpler way to author quizzes</h2><button data-close="help-dialog" aria-label="Close help">✕</button></div>
+    <ol class="steps">
+      <li><strong>Name the bank.</strong> Add a question and choose its type.</li>
+      <li><strong>Write the question.</strong> Fill in answers and mark the correct choices. Everything is entered through forms, not JSON or Markdown.</li>
+      <li><strong>Build your bank.</strong> Duplicate questions, reorder them, and preview the student-facing text.</li>
+      <li><strong>Save project.</strong> Save the downloaded JSON in <strong>local-json</strong>. It contains answers and instructor notes and can be reopened here.</li>
+      <li><strong>Export Canvas ZIP.</strong> Fix validation errors, read the compatibility notes and save the ZIP in <strong>export</strong>.</li>
+      <li><strong>Test in Canvas.</strong> Create an empty, unpublished New Quiz, open its Build screen, and use its QTI import option. Check all question types and scoring before publishing. For Classic, use Settings → Import Course Content → QTI .zip file.</li>
+    </ol>
+    <h3>Where to save and open files</h3>
+    <ul>
+      <li><strong>local-json</strong>: your editable <code>.quiz.json</code> projects and the supplied
+        practice example. Use <strong>Open project</strong> to select a JSON file from this folder.</li>
+      <li><strong>export</strong>: the <code>.zip</code> packages you import into Canvas.
+        ZIPs cannot be reopened as editable projects in this editor.</li>
+    </ul>
+    <p>These folders are beside this HTML file in the supplied package. In your browser's download
+      settings, enable <strong>Ask where to save each file before downloading</strong> (or the
+      equivalent option), then choose the appropriate folder when saving. If a download goes
+      straight to Downloads, move it into the appropriate folder afterwards.</p>
+    <p>The editor cannot automatically choose these folders or write beside the HTML file.
+      Keep both folders private: JSON contains solutions and ZIP contains grading keys.
+      <strong>Load example</strong> still works from the single HTML file without either folder.</p>
+    <h3>What is a stimulus?</h3>
+    <p>A <strong>stimulus is shared information</strong> used by several questions: a passage, scenario,
+      matrix or set of given values. It is not a question, has no answer box and earns no marks.
+      Keep solutions in private instructor notes, not in the stimulus.</p>
+    <p><strong>Example:</strong> “A stereo rig has f = 1000 px and B = 0.2 m” is the stimulus.
+      “Find depth at disparity 40 px” and “Find depth at disparity 25 px” are two separate
+      numerical questions linked to that same stimulus.</p>
+    <ol>
+      <li>Add a <strong>Shared stimulus</strong>, name it and enter the shared givens.</li>
+      <li>Use <strong>Add linked question</strong> on that entry, or select it in an existing question's
+        <strong>Shared stimulus (optional)</strong> dropdown.</li>
+      <li>Check <strong>Student preview</strong>: the givens appear above the question.</li>
+    </ol>
+    <p>Try <strong>Load example</strong> and select <strong>Q13 — Shared stereo rig</strong>.
+      This instructor example contains all 20 practice questions and their worked notes:
+      76 scored items (43 numerical, 33 essay), 12 shared stimuli, and 180 points.
+      Save your current project before replacing it.</p>
+    <h3>Important limits</h3>
+    <p>New Quizzes export uses portable QTI 2.1, not a certified native Canvas exporter.
+      Categorisation uses many-to-one matching. Stimulus text is repeated in linked questions.
+      Formula samples become separate numerical questions. Ordering and hotspots require import testing.
+      The export screen explains these transformations before download.</p>
+    <p>Prompts use plain text and line breaks. LaTeX and HTML are not rendered. Images are supported for hotspots (local PNG/JPEG, up to 5 MB).
+      Formulas allow variables, numbers, parentheses and + − * / ^. No scripts or functions are evaluated.</p>
+    <p>There are no network requests. Browser drafts may be unavailable, cleared, or associated with this file location.
+      <strong>Save project is your backup.</strong> Do not share source projects or ZIP answer keys with students.</p>
+    <h3>Format sources</h3>
+    <ul class="references">
+      <li><a href="https://www.imsglobal.org/question/qtiv2p1/imsqti_implv2p1.html" target="_blank" rel="noopener noreferrer">1EdTech QTI 2.1 Implementation Guide</a> — portable interactions, declarations and scoring.</li>
+      <li><a href="https://developerdocs.instructure.com/services/canvas/resources/new_quiz_items" target="_blank" rel="noopener noreferrer">Instructure New Quiz Items API</a> — Canvas-native question types; this is not a QTI import specification.</li>
+      <li><a href="https://github.com/instructure/canvas-lms/blob/master/lib/cc/qti/qti_items.rb" target="_blank" rel="noopener noreferrer">Canvas Classic QTI exporter (GitHub)</a> — Classic encodings and formula extensions.</li>
+      <li><a href="https://github.com/instructure/canvas-lms/blob/master/lib/cc/qti/new_quizzes_generator.rb" target="_blank" rel="noopener noreferrer">Canvas New Quizzes package integration (GitHub)</a> — delegates native export to another service; it does not specify every native interaction.</li>
+    </ul>
+    <p class="hint">References consulted 29 October 2026. Project JSON and this editor's forms are custom formats, not Canvas standards.</p>
+    <button data-close="help-dialog" class="primary">Start writing</button>
+  </dialog>
+  <footer>Quiz Studio · Local authoring for Canvas · Keep answer keys private</footer>
+  <script type="application/json" id="practice-data">{"format":"canvas-browser-v1","title":"CT4109 Practice Questions Q1–Q20 — Weeks 1–4","questions":[{"id":"practice_q01","type":"essay","title":"Q1 — Homogeneous coordinates","points":6,"stimulusId":"","prompt":"(a) Write the Cartesian point (3, 4) in two different homogeneous forms, and convert (6, 9, 3)^T back to Cartesian coordinates. [2 marks]\n(b) Find the line l through (1, 1) and (3, 5) using a cross product. [2 marks]\n(c) Find the intersection of l with the line x = 0, whose homogeneous line vector is (1, 0, 0)^T. [2 marks]\nShow your working.","solution":"(a) (3, 4, 1)^T and (6, 8, 2)^T represent (3, 4); (6, 9, 3)^T becomes (2, 3).\n(b) (1, 1, 1) × (3, 5, 1) = (-4, 2, 2), giving -4x + 2y + 2 = 0, or y = 2x - 1.\n(c) (-4, 2, 2) × (1, 0, 0) = (0, 2, -2). Divide by -2 to obtain (0, -1).\nEquivalent non-zero homogeneous scalings are acceptable."},{"id":"practice_q02","type":"essay","title":"Q2 — Transformation hierarchy","points":8,"stimulusId":"","prompt":"(a) State the degrees of freedom of a 2D Euclidean, similarity, affine and projective transformation. [4 marks]\n(b) For each, state which of these are preserved: parallelism, ratios of lengths on a line, angles, and cross-ratio. [2 marks]\n(c) How many point correspondences are needed to estimate a 2D homography, and why? State the non-degeneracy requirement. [2 marks]","solution":"(a) Euclidean: 3; similarity: 4; affine: 6; projective: 8.\n(b) Euclidean and similarity preserve all four listed properties. Affine preserves parallelism, ratios on a line and cross-ratio, but not angles. A general projective transformation preserves cross-ratio but not the other three.\n(c) Four point pairs in general position (no three collinear in either plane). A 3 × 3 homography has 9 entries minus one arbitrary scale = 8 degrees of freedom; each pair gives two independent equations."},{"id":"practice_q03","type":"essay","title":"Q3 — Rotation matrices","points":8,"stimulusId":"","prompt":"Let R be the rotation of +90 degrees about the z-axis, acting on column vectors.\n(a) Write R and verify R^T R = I and det(R) = 1. [3 marks]\n(b) Compute R^(-1) without a general matrix inversion, and apply R to (1, 2, 3)^T. [2 marks]\n(c) A rotation Rx(+90 degrees) is applied after R. Write the combined matrix and explain whether the order matters. [3 marks]","solution":"(a) R = [[0, -1, 0], [1, 0, 0], [0, 0, 1]]. Its columns are orthonormal, so R^T R = I, and det(R) = 1.\n(b) R^(-1) = R^T = [[0, 1, 0], [-1, 0, 0], [0, 0, 1]]. Applying R gives (-2, 1, 3)^T.\n(c) Rx = [[1, 0, 0], [0, 0, -1], [0, 1, 0]]. The combined matrix is Rx R = [[0, -1, 0], [0, 0, -1], [1, 0, 0]]. Reversing the order gives a different result."},{"id":"practice_q04_context","type":"stimulus","title":"Q4 — Shared camera data","points":0,"stimulusId":"","solution":"","prompt":"A pinhole camera has focal length f = 8 mm, square pixels of size 5 micrometres, and a 1280 × 960 pixel sensor. Take the principal point at (width/2, height/2), with no skew.\nThe point in camera coordinates is (X, Y, Z) = (0.5, -0.2, 5) metres."},{"id":"practice_q04_a_f","type":"numerical","title":"Q4(a) — Focal length in pixels","points":1,"stimulusId":"practice_q04_context","prompt":"Calculate the common focal length fx = fy in pixels. Enter a number only.","numeric":{"mode":"exact","value":1600,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"5 micrometres = 0.005 mm. fx = fy = 8 / 0.005 = 1600 pixels."},{"id":"practice_q04_a_k","type":"essay","title":"Q4(a) — Intrinsic matrix K","points":2,"stimulusId":"practice_q04_context","prompt":"Write the camera intrinsic matrix K. Show how you obtain the principal point and focal lengths.","solution":"fx = fy = 8/0.005 = 1600 px. cx = 1280/2 = 640 and cy = 960/2 = 480.\nK = [[1600, 0, 640], [0, 1600, 480], [0, 0, 1]]."},{"id":"practice_q04_b_u","type":"numerical","title":"Q4(b) — Projected u-coordinate","points":1.5,"stimulusId":"practice_q04_context","prompt":"Project the given camera-frame point. Enter its image u-coordinate in pixels.","numeric":{"mode":"exact","value":800,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"u = fx X/Z + cx = 1600(0.5/5) + 640 = 800 px."},{"id":"practice_q04_b_v","type":"numerical","title":"Q4(b) — Projected v-coordinate","points":1.5,"stimulusId":"practice_q04_context","prompt":"Project the given camera-frame point. Enter its image v-coordinate in pixels.","numeric":{"mode":"exact","value":416,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"v = fy Y/Z + cy = 1600(-0.2/5) + 480 = 416 px."},{"id":"practice_q04_c","type":"essay","title":"Q4(c) — Effect of doubling depth","points":2,"stimulusId":"practice_q04_context","prompt":"The point moves to Z = 10 m while X and Y remain fixed. What happens to its image offset from the principal point? Explain.","solution":"The offsets halve because they are proportional to 1/Z. At Z = 5 m they are (160, -64) px; at Z = 10 m they are (80, -32) px, giving image position (720, 448)."},{"id":"practice_q05_context","type":"stimulus","title":"Q5 — Shared camera pose","points":0,"stimulusId":"","solution":"","prompt":"K = [[800, 0, 320], [0, 800, 240], [0, 0, 1]], R = I, and the camera centre is C = (0, 0, -2)^T.\nUse Xc = R Xw + t and P = K[R | t]. The world point to project is Xw = (0.25, 0.125, 3)^T."},{"id":"practice_q05_a","type":"essay","title":"Q5(a) — Translation and projection matrix","points":3,"stimulusId":"practice_q05_context","prompt":"Find t and write P = K[R | t]. Show your working.","solution":"t = -R C = (0, 0, 2)^T.\nK t = (640, 480, 2)^T.\nP = [[800, 0, 320, 640], [0, 800, 240, 480], [0, 0, 1, 2]]."},{"id":"practice_q05_b_u","type":"numerical","title":"Q5(b) — World point projection u","points":1.5,"stimulusId":"practice_q05_context","prompt":"Project the given world point. Enter the image u-coordinate in pixels.","numeric":{"mode":"exact","value":360,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"Xc = (0.25, 0.125, 5). u = 800(0.25/5) + 320 = 360 px."},{"id":"practice_q05_b_v","type":"numerical","title":"Q5(b) — World point projection v","points":1.5,"stimulusId":"practice_q05_context","prompt":"Project the given world point. Enter the image v-coordinate in pixels.","numeric":{"mode":"exact","value":260,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"Xc = (0.25, 0.125, 5). v = 800(0.125/5) + 240 = 260 px."},{"id":"practice_q05_c","type":"essay","title":"Q5(c) — Projection matrix degrees of freedom","points":2,"stimulusId":"practice_q05_context","prompt":"Explain why a general 3 × 4 camera projection matrix P has 11 degrees of freedom.","solution":"There are 12 matrix entries, but multiplying the whole matrix by a non-zero scale does not change the projective mapping. Therefore 12 - 1 = 11 independent parameters."},{"id":"practice_q06_context","type":"stimulus","title":"Q6 — Shared road measurement data","points":0,"stimulusId":"","solution":"","prompt":"A forward-looking camera views a planar road. Ground coordinates are in centimetres.\nThe ground-to-image homography is H = [[2, 0, 100], [0, 1, 50], [0, 0.002, 1]].\nThe left and right kerb pixels are (200, 200) and (600, 200). Use the inverse homography followed by division by the homogeneous scale to recover ground coordinates."},{"id":"practice_q06_a","type":"essay","title":"Q6(a) — Invert the road homography","points":4,"stimulusId":"practice_q06_context","prompt":"Compute H^(-1). A non-zero scalar multiple is acceptable. Show your working.","solution":"det(H) = 2(1 - 50 × 0.002) = 1.8.\nadj(H) = [[0.9, 0.2, -100], [0, 2, -100], [0, -0.004, 2]].\nH^(-1) = adj(H)/1.8. The adjugate alone gives the same Cartesian mapping after the perspective divide."},{"id":"practice_q06_b_left_x","type":"numerical","title":"Q6(b) — Left kerb ground X","points":0.75,"stimulusId":"practice_q06_context","prompt":"Map the left kerb pixel to the road. Enter its ground X-coordinate in centimetres.","numeric":{"mode":"exact","value":100,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"adj(H)(200, 200, 1)^T = (120, 300, 1.2)^T. X = 120/1.2 = 100 cm."},{"id":"practice_q06_b_left_y","type":"numerical","title":"Q6(b) — Left kerb ground Y","points":0.75,"stimulusId":"practice_q06_context","prompt":"Map the left kerb pixel to the road. Enter its ground Y-coordinate in centimetres.","numeric":{"mode":"exact","value":250,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"adj(H)(200, 200, 1)^T = (120, 300, 1.2)^T. Y = 300/1.2 = 250 cm."},{"id":"practice_q06_b_right_x","type":"numerical","title":"Q6(b) — Right kerb ground X","points":0.75,"stimulusId":"practice_q06_context","prompt":"Map the right kerb pixel to the road. Enter its ground X-coordinate in centimetres.","numeric":{"mode":"exact","value":400,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"adj(H)(600, 200, 1)^T = (480, 300, 1.2)^T. X = 480/1.2 = 400 cm."},{"id":"practice_q06_b_right_y","type":"numerical","title":"Q6(b) — Right kerb ground Y","points":0.75,"stimulusId":"practice_q06_context","prompt":"Map the right kerb pixel to the road. Enter its ground Y-coordinate in centimetres.","numeric":{"mode":"exact","value":250,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"adj(H)(600, 200, 1)^T = (480, 300, 1.2)^T. Y = 300/1.2 = 250 cm."},{"id":"practice_q06_c_width","type":"numerical","title":"Q6(c) — Road width in metres","points":1,"stimulusId":"practice_q06_context","prompt":"Calculate the road width. Enter your answer in metres, not centimetres or pixels.","numeric":{"mode":"exact","value":3,"tolerance":0.005,"min":0,"max":0,"figures":3},"solution":"The ground points are (100, 250) cm and (400, 250) cm. Their distance is 300 cm = 3 m."},{"id":"practice_q06_c_explain","type":"essay","title":"Q6(c) — Why pixel subtraction is insufficient","points":2,"stimulusId":"practice_q06_context","prompt":"Why would simply subtracting the horizontal pixel coordinates, giving 400 pixels, not give the physical road width?","solution":"Perspective scale depends on position/depth. A pixel distance is not a metric distance. The calibrated inverse homography maps both endpoints into ground coordinates in known units; a single global pixels-to-centimetres factor is generally invalid."},{"id":"practice_q07_context","type":"stimulus","title":"Q7 — Shared surgical measurement data","points":0,"stimulusId":"","solution":"","prompt":"A calibrated overhead camera views a planar operating field. Field coordinates are in millimetres.\nThe field-to-image homography is H = [[1, 0, 0], [0, 1, 0], [0.002, 0.001, 1]].\nAn instrument's tip and tail appear at pixels (250, 0) and (125, 250). Assume both lie in the calibrated plane."},{"id":"practice_q07_a","type":"essay","title":"Q7(a) — Invert the surgical homography","points":3,"stimulusId":"practice_q07_context","prompt":"Write H^(-1) and verify your result.","solution":"H^(-1) = [[1, 0, 0], [0, 1, 0], [-0.002, -0.001, 1]]. Multiplying by H cancels the two off-diagonal entries in the third row, yielding I."},{"id":"practice_q07_b_tip_x","type":"numerical","title":"Q7(b) — Tip X-coordinate","points":1,"stimulusId":"practice_q07_context","prompt":"Inverse-map the instrument tip. Enter X in millimetres.","numeric":{"mode":"exact","value":500,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"H^(-1)(250, 0, 1)^T = (250, 0, 0.5)^T. X = 250/0.5 = 500 mm."},{"id":"practice_q07_b_tip_y","type":"numerical","title":"Q7(b) — Tip Y-coordinate","points":1,"stimulusId":"practice_q07_context","prompt":"Inverse-map the instrument tip. Enter Y in millimetres.","numeric":{"mode":"exact","value":0,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"The tip's homogeneous result is (250, 0, 0.5)^T. Y = 0/0.5 = 0 mm."},{"id":"practice_q07_b_tail_x","type":"numerical","title":"Q7(b) — Tail X-coordinate","points":1,"stimulusId":"practice_q07_context","prompt":"Inverse-map the instrument tail. Enter X in millimetres.","numeric":{"mode":"exact","value":250,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"H^(-1)(125, 250, 1)^T = (125, 250, 0.5)^T. X = 125/0.5 = 250 mm."},{"id":"practice_q07_b_tail_y","type":"numerical","title":"Q7(b) — Tail Y-coordinate","points":1,"stimulusId":"practice_q07_context","prompt":"Inverse-map the instrument tail. Enter Y in millimetres.","numeric":{"mode":"exact","value":500,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"The tail's homogeneous result is (125, 250, 0.5)^T. Y = 250/0.5 = 500 mm."},{"id":"practice_q07_c_length","type":"numerical","title":"Q7(c) — Instrument length","points":1,"stimulusId":"practice_q07_context","prompt":"Calculate the instrument length in millimetres. Round to one decimal place.","numeric":{"mode":"exact","value":559.0169943749474,"tolerance":0.1,"min":0,"max":0,"figures":3},"solution":"The endpoints are (500, 0) and (250, 500) mm. Length = sqrt((500-250)^2 + (0-500)^2) = sqrt(312500) = 559.01699... mm, or 559.0 mm."},{"id":"practice_q07_c_errors","type":"essay","title":"Q7(c) — Measurement errors and calibration","points":2,"stimulusId":"practice_q07_context","prompt":"Give two reasons the measured length may be wrong by several millimetres in practice and one way to improve the four-point calibration.","solution":"Possible errors: inaccurate endpoint/calibration-point localisation; unmodelled lens distortion; instrument endpoints not lying in the calibrated plane. Improve calibration using more than four well-distributed reference points and an overdetermined least-squares fit (with outlier handling when appropriate)."},{"id":"practice_q08_context","type":"stimulus","title":"Q8 — Shared pure-rotation camera data","points":0,"stimulusId":"","solution":"","prompt":"K = [[800, 0, 320], [0, 800, 240], [0, 0, 1]]. The camera rotates about its centre with no translation. Use Ry(10 degrees) = [[cos(10°), 0, sin(10°)], [0, 1, 0], [-sin(10°), 0, cos(10°)]] for the mapping from image 1 rays to image 2 rays.\nThe image 1 principal point is (320, 240). Both views have the same K."},{"id":"practice_q08_a","type":"essay","title":"Q8(a) — Pure rotation homography","points":2,"stimulusId":"practice_q08_context","prompt":"Give the formula for the homography H mapping image 1 to image 2.","solution":"H = K R K^(-1), where R is the stated rotation of image 1 rays into image 2 coordinates."},{"id":"practice_q08_b_u","type":"numerical","title":"Q8(b) — Rotated principal point u","points":2,"stimulusId":"practice_q08_context","prompt":"Where does the image 1 principal point appear in image 2? Enter the u-coordinate in pixels, to one decimal place.","numeric":{"mode":"exact","value":461.061584566772,"tolerance":0.1,"min":0,"max":0,"figures":3},"solution":"K^(-1)(320,240,1)^T = (0,0,1)^T. Rotation gives (sin(10°),0,cos(10°))^T. After projecting, u = 800 tan(10°) + 320 = 461.06158... px, or 461.1 px."},{"id":"practice_q08_b_v","type":"numerical","title":"Q8(b) — Rotated principal point v","points":2,"stimulusId":"practice_q08_context","prompt":"Where does the image 1 principal point appear in image 2? Enter the v-coordinate in pixels.","numeric":{"mode":"exact","value":240,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"The rotated normalised ray has zero y component, so v = 800 × 0 + 240 = 240 px."},{"id":"practice_q08_c","type":"essay","title":"Q8(c) — Why pure rotation gives no depth","points":2,"stimulusId":"practice_q08_context","prompt":"Why can depth not be recovered by triangulation from two images related by pure rotation about the camera centre?","solution":"The views share the same camera centre, so there is no translational baseline or parallax. H = K R K^(-1) has no depth term; points at different distances along the same ray transform identically."},{"id":"practice_q09","type":"essay","title":"Q9 — Direct Linear Transform","points":10,"stimulusId":"","prompt":"(a) How many independent equations does each 3D–2D correspondence give for P, and what is the minimum number of points? [3 marks]\n(b) Explain how SVD solves A p = 0, and why normalising points helps. [3 marks]\n(c) Name one degenerate configuration of the 3D points and explain the effect. [2 marks]\n(d) How are K, R and t recovered from P = [M | p4]? [2 marks]","solution":"(a) Two equations per point; at least six non-degenerate 3D–2D correspondences for the 11 degrees of freedom of P.\n(b) Form a 2n × 12 matrix A. In A = U Σ V^T, choose the last column of V (smallest singular value) and reshape it to 3 × 4. Normalise centroids to zero and mean distances to sqrt(2) in 2D / sqrt(3) in 3D to improve conditioning; denormalise the resulting P.\n(c) All 3D points on a plane is degenerate for a general camera matrix: P is not uniquely determined.\n(d) RQ-decompose M = K R, enforce the chosen sign/scale conventions, then t = K^(-1) p4."},{"id":"practice_q10","type":"essay","title":"Q10 — Essential matrix and epipolar lines","points":10,"stimulusId":"","prompt":"Two normalised cameras have R = I and translation direction t = (0, 0, 1)^T, representing motion along the optical axis. Use E = [t]× R.\n(a) Write E. [3 marks]\n(b) For x = (0.2, 0.1, 1)^T in image 1, compute the epipolar line l' = E x in image 2. [3 marks]\n(c) Where are the epipoles? What is distinctive about epipolar lines for this forward-motion geometry? [4 marks]","solution":"(a) E = [[0, -1, 0], [1, 0, 0], [0, 0, 0]], up to non-zero scale.\n(b) l' = (-0.1, 0.2, 0)^T, giving -0.1x' + 0.2y' = 0, or y' = 0.5x'.\n(c) Both epipoles are (0, 0, 1)^T, the principal point in normalised coordinates. Epipolar lines radiate through it rather than being parallel horizontal lines. Changing the sign of E does not change the lines."},{"id":"practice_q11","type":"essay","title":"Q11 — Fundamental matrix","points":8,"stimulusId":"","prompt":"(a) State the epipolar constraint and the relation between the fundamental matrix F and essential matrix E. [3 marks]\n(b) Give the degrees of freedom of E and F and explain why det(F) = 0. Assume a non-zero stereo baseline. [3 marks]\n(c) How many correspondences does the linear 8-point algorithm need, and which step enforces rank 2? [2 marks]","solution":"(a) x'^T F x = 0 for corresponding pixel points. F = K'^(-T) E K^(-1), equivalently E = K'^T F K.\n(b) E has 5 degrees of freedom: 3 for rotation and 2 for translation direction up to scale. F has 7: 9 entries minus scale and the determinant constraint. Its epipolar construction includes a rank-2 skew-symmetric factor, so det(F) = 0.\n(c) At least 8 correspondences. After SVD of the estimate, set its smallest singular value to zero and reconstruct F."},{"id":"practice_q12","type":"essay","title":"Q12 — Rectification and triangulation","points":8,"stimulusId":"","prompt":"(a) What does standard horizontal stereo rectification do to the epipolar lines and epipoles? [3 marks]\n(b) Why does this reduce stereo matching to a 1D search? [2 marks]\n(c) Four (R, t) decompositions of E exist. How is the physically correct one selected using chirality? [3 marks]","solution":"(a) Corresponding epipolar lines become horizontal and aligned by image row; epipoles lie at infinity along the horizontal direction, (1, 0, 0)^T.\n(b) Correspondences are on the same row, leaving only a horizontal displacement to search.\n(c) The four candidates are (R1, ±t) and (R2, ±t). Triangulate correspondences and choose the candidate putting points in front of both cameras, with positive camera-frame depth."},{"id":"practice_q13_context","type":"stimulus","title":"Q13 — Shared stereo rig (stimulus example)","points":0,"stimulusId":"","solution":"","prompt":"Use this same setup for all linked Q13 questions:\nA rectified stereo rig has focal length f = 1000 pixels and baseline B = 0.2 metres.\nDisparity is measured in pixels and depth in metres."},{"id":"practice_q13_a_40","type":"numerical","title":"Q13(a) — Depth at disparity 40 px","points":1,"stimulusId":"practice_q13_context","prompt":"Calculate the depth for disparity d = 40 px. Enter metres as a number only.","numeric":{"mode":"exact","value":5,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"Z = fB/d = 1000 × 0.2 / 40 = 5 m."},{"id":"practice_q13_a_25","type":"numerical","title":"Q13(a) — Depth at disparity 25 px","points":1,"stimulusId":"practice_q13_context","prompt":"Calculate the depth for disparity d = 25 px. Enter metres as a number only.","numeric":{"mode":"exact","value":8,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"Z = fB/d = 1000 × 0.2 / 25 = 8 m."},{"id":"practice_q13_a_10","type":"numerical","title":"Q13(a) — Depth at disparity 10 px","points":1,"stimulusId":"practice_q13_context","prompt":"Calculate the depth for disparity d = 10 px. Enter metres as a number only.","numeric":{"mode":"exact","value":20,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"Z = fB/d = 1000 × 0.2 / 10 = 20 m."},{"id":"practice_q13_b","type":"numerical","title":"Q13(b) — Depth precision at 20 m","points":3,"stimulusId":"practice_q13_context","prompt":"At Z = 20 m, estimate the magnitude of the depth uncertainty for a disparity error of ±1 px. Use first-order error propagation and enter the positive uncertainty in metres.","numeric":{"mode":"exact","value":2,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"|ΔZ| ≈ Z^2 |Δd| / (fB) = 20^2 × 1 / (1000 × 0.2) = 2 m. The exact errors at disparities 9 and 11 px are asymmetric; this question asks for the first-order approximation."},{"id":"practice_q13_c","type":"essay","title":"Q13(c) — Doubling the baseline","points":2,"stimulusId":"practice_q13_context","prompt":"If the baseline is doubled, explain the effects on range, depth precision and matching difficulty.","solution":"At a fixed disparity the measurable depth doubles. At fixed depth and disparity-error magnitude, uncertainty halves (2 m becomes 1 m at Z = 20 m). Larger baseline increases disparities and required search range, can increase occlusions, and reduces overlap at close range."},{"id":"practice_q14_context","type":"stimulus","title":"Q14 — Shared block-matching windows","points":0,"stimulusId":"","solution":"","prompt":"The 3 × 3 left window is L = [[10, 20, 30], [40, 50, 60], [70, 80, 90]].\nThe candidate right windows are:\nR0 = [[12, 22, 28], [38, 52, 61], [72, 79, 93]];\nR1 = [[50, 60, 70], [80, 90, 100], [10, 20, 30]].\nSAD sums absolute pixel differences. SSD sums squared pixel differences."},{"id":"practice_q14_a_sad0","type":"numerical","title":"Q14(a) — SAD for R0","points":1,"stimulusId":"practice_q14_context","prompt":"Calculate SAD(L, R0). Enter an integer.","numeric":{"mode":"exact","value":17,"tolerance":0,"min":0,"max":0,"figures":3},"solution":"Absolute differences: [[2,2,2],[2,2,1],[2,1,3]]. Their sum is 17."},{"id":"practice_q14_a_ssd0","type":"numerical","title":"Q14(a) — SSD for R0","points":1,"stimulusId":"practice_q14_context","prompt":"Calculate SSD(L, R0). Enter an integer.","numeric":{"mode":"exact","value":35,"tolerance":0,"min":0,"max":0,"figures":3},"solution":"Squared differences: [[4,4,4],[4,4,1],[4,1,9]]. Their sum is 35."},{"id":"practice_q14_a_sad1","type":"numerical","title":"Q14(a) — SAD for R1","points":1,"stimulusId":"practice_q14_context","prompt":"Calculate SAD(L, R1). Enter an integer.","numeric":{"mode":"exact","value":420,"tolerance":0,"min":0,"max":0,"figures":3},"solution":"Six absolute differences are 40 and three are 60. SAD = 6 × 40 + 3 × 60 = 420."},{"id":"practice_q14_a_ssd1","type":"numerical","title":"Q14(a) — SSD for R1","points":1,"stimulusId":"practice_q14_context","prompt":"Calculate SSD(L, R1). Enter an integer.","numeric":{"mode":"exact","value":20400,"tolerance":0,"min":0,"max":0,"figures":3},"solution":"SSD = 6 × 40^2 + 3 × 60^2 = 9600 + 10800 = 20400."},{"id":"practice_q14_b","type":"essay","title":"Q14(b) — Winner-takes-all selection","points":2,"stimulusId":"practice_q14_context","prompt":"Which candidate's disparity is selected by winner-takes-all? Explain using the costs.","solution":"Choose the disparity corresponding to R0 because it minimises both SAD (17 \u003c 420) and SSD (35 \u003c 20400). The actual pixel displacement is not specified; the answer is the R0 candidate."},{"id":"practice_q14_c","type":"essay","title":"Q14(c) — SSD and outliers","points":2,"stimulusId":"practice_q14_context","prompt":"Why are SSD costs more sensitive to outliers than SAD costs?","solution":"SSD squares residuals, so one large mismatch can dominate the sum. SAD grows only linearly with residual magnitude. Specular highlights or occlusion can create such large residuals."},{"id":"practice_q14_d","type":"essay","title":"Q14(d) — Window-matching failure cases","points":2,"stimulusId":"practice_q14_context","prompt":"Name two image conditions in which this local window-matching approach can fail, and briefly explain why.","solution":"Textureless regions give a flat or ambiguous cost curve. Repeating patterns give several similar minima. Occlusions, depth discontinuities and brightness differences can also violate the matching assumptions. Any two appropriate explanations."},{"id":"practice_q15","type":"essay","title":"Q15 — Local versus global stereo methods","points":10,"stimulusId":"","prompt":"(a) Explain the effect of window size on accuracy at depth edges and in low-texture regions. [3 marks]\n(b) What do the smoothness penalties P1 and P2 add in scanline/semi-global methods? [3 marks]\n(c) Describe a left–right consistency check and which pixels it rejects. [2 marks]\n(d) A flat wall with a repeating tile pattern is labelled at the wrong depth. Diagnose the problem and suggest two remedies. [2 marks]","solution":"(a) Small windows preserve sharper boundaries but are noisy/ambiguous in weak texture. Larger windows add support but mix depths and blur/fatten boundaries.\n(b) P1 penalises a disparity change of one; P2 penalises larger changes, usually more strongly. Smoothness encourages coherent surfaces while balancing evidence for real depth changes.\n(c) Match in both directions. With a consistent positive-disparity convention, reject where |dL(x) - dR(x - dL(x))| exceeds a tolerance (often 1 px). These are commonly occlusions or mismatches.\n(d) Repeated texture creates ambiguous periodic matches. Remedies include a suitable larger support region, SGM/global constraints, a physically justified search range, added texture/structured light, or a consistency check. A consistency check does not guarantee removal of mutually consistent wrong matches."},{"id":"practice_q16_context","type":"stimulus","title":"Q16 — Shared checkerboard calibration data","points":0,"stimulusId":"","solution":"","prompt":"A planar checkerboard lies on Zw = 0, with board coordinates in millimetres.\nK = [[1000, 0, 500], [0, 1000, 400], [0, 0, 1]].\nR = [[1, 0, 0], [0, 0.8, -0.6], [0, 0.6, 0.8]].\nt = (0, 50, 1000)^T mm.\nThe board-to-image homography is H = K[r1 | r2 | t], where r1 and r2 are the first two columns of R. The board corner to project is (100, 100) mm."},{"id":"practice_q16_a","type":"essay","title":"Q16(a) — Checkerboard homography","points":4,"stimulusId":"practice_q16_context","prompt":"Calculate the 3 × 3 homography H = K[r1 | r2 | t], relating (X, Y, 1)^T on the board to image pixels (u, v, 1)^T up to scale. Show the matrix multiplication.","solution":"K r1 = (1000, 0, 0)^T; K r2 = (300, 1040, 0.6)^T; K t = (500000, 450000, 1000)^T.\nH = [[1000, 300, 500000], [0, 1040, 450000], [0, 0.6, 1000]].\nAn equivalent scaled matrix is [[1, 0.3, 500], [0, 1.04, 450], [0, 0.0006, 1]]."},{"id":"practice_q16_b_u","type":"numerical","title":"Q16(b) — Checkerboard corner u","points":1.5,"stimulusId":"practice_q16_context","prompt":"Project the checkerboard corner. Enter u in pixels, to one decimal place.","numeric":{"mode":"exact","value":594.3396226415094,"tolerance":0.1,"min":0,"max":0,"figures":3},"solution":"Using H scaled by 1/1000, H(100,100,1)^T = (630,554,1.06)^T. u = 630/1.06 = 594.3396... px, or 594.3 px."},{"id":"practice_q16_b_v","type":"numerical","title":"Q16(b) — Checkerboard corner v","points":1.5,"stimulusId":"practice_q16_context","prompt":"Project the checkerboard corner. Enter v in pixels, to one decimal place.","numeric":{"mode":"exact","value":522.6415094339623,"tolerance":0.1,"min":0,"max":0,"figures":3},"solution":"The homogeneous image point is (630,554,1.06)^T. v = 554/1.06 = 522.6415... px, or 522.6 px."},{"id":"practice_q16_c","type":"essay","title":"Q16(c) — Zhang's two constraints","points":3,"stimulusId":"practice_q16_context","prompt":"For the first two columns h1 and h2 of H, explain the geometric origin of:\nh1^T K^(-T) K^(-1) h2 = 0,\nand\nh1^T K^(-T) K^(-1) h1 = h2^T K^(-T) K^(-1) h2.","solution":"Up to a common scale λ, h1 = λ K r1 and h2 = λ K r2. The first constraint follows from r1 and r2 being orthogonal. The second follows from their equal unit lengths. These are properties of the first two columns of a rotation matrix."},{"id":"practice_q17_context","type":"stimulus","title":"Q17 — Shared fundamental matrix and feature","points":0,"stimulusId":"","solution":"","prompt":"A stereo rig has fundamental matrix F = [[0, 0, 0], [0, 0, -0.04], [0, 0.04, 0]].\nThe Image 1 point is x = (250, 200, 1)^T.\nCandidate Image 2 points are x'A = (180, 200, 1)^T and x'B = (180, 210, 1)^T."},{"id":"practice_q17_a_det","type":"numerical","title":"Q17(a) — Determinant of F","points":0.5,"stimulusId":"practice_q17_context","prompt":"Evaluate det(F).","numeric":{"mode":"exact","value":0,"tolerance":0,"min":0,"max":0,"figures":3},"solution":"The first row is zero, so det(F) = 0."},{"id":"practice_q17_a_rank","type":"numerical","title":"Q17(a) — Rank of F","points":0.5,"stimulusId":"practice_q17_context","prompt":"State the rank of F. Enter an integer.","numeric":{"mode":"exact","value":2,"tolerance":0,"min":0,"max":0,"figures":3},"solution":"Rows 2 and 3 are non-zero and independent, while row 1 is zero. Therefore rank(F) = 2."},{"id":"practice_q17_a_verify","type":"essay","title":"Q17(a) — Verify determinant and rank","points":1,"stimulusId":"practice_q17_context","prompt":"Show why the determinant is zero and justify the rank using the matrix's rows or columns.","solution":"The zero first row forces determinant zero. Rows (0,0,-0.04) and (0,0.04,0) are linearly independent; therefore the rank is exactly 2, not merely at most 2."},{"id":"practice_q17_b","type":"essay","title":"Q17(b) — Epipole at infinity","points":3,"stimulusId":"practice_q17_context","prompt":"Find e' satisfying F^T e' = 0. Show that it lies at infinity and explain the implication for the epipolar geometry.","solution":"For e' = (a,b,c)^T, F^T e' = 0 gives 0.04c = 0 and -0.04b = 0. Thus e' = (1,0,0)^T up to scale. Its last coordinate is zero: it is at horizontal infinity, so epipolar lines are parallel and horizontal (rectified-type geometry). F alone does not uniquely establish the physical camera pose or calibration."},{"id":"practice_q17_c","type":"essay","title":"Q17(c) — Algebraic epipolar line","points":3,"stimulusId":"practice_q17_context","prompt":"Determine l' = F x = (a,b,c)^T and write the algebraic equation of the corresponding epipolar line in Image 2.","solution":"F(250,200,1)^T = (0,-0.04,8)^T. Therefore -0.04v' + 8 = 0, or v' = 200. An equivalent line vector is (0,1,-200)^T."},{"id":"practice_q17_d","type":"essay","title":"Q17(d) — Test point incidence","points":2,"stimulusId":"practice_q17_context","prompt":"Test whether candidate A or B lies on the epipolar line corresponding to x. Show the incidence calculation for each candidate.","solution":"The line is v' = 200. Using (0,1,-200), A gives 200-200 = 0 and lies on the line. B gives 210-200 = 10 and does not. Using unnormalised F x gives 0 and -0.4 respectively; both scalings are valid."},{"id":"practice_q18_context","type":"stimulus","title":"Q18 — Shared calibrated stereo geometry","points":0,"stimulusId":"","solution":"","prompt":"Both cameras have K = I and relative orientation R = I. Camera 2's centre in Camera 1 coordinates is t = (0.2, 0, 0)^T metres, so a point transforms as P2 = R^T(P1 - t).\nThe observed normalised image points are x1 = (0.10, 0.05, 1)^T and x2 = (0.06, 0.05, 1)^T.\nFor this R = I case, use the essential-matrix representative E = [t]×R. E and -E encode the same epipolar constraint."},{"id":"practice_q18_a","type":"essay","title":"Q18(a) — Skew matrix and essential matrix","points":3,"stimulusId":"practice_q18_context","prompt":"Construct the skew-symmetric matrix [t]× and compute E = [t]×R.","solution":"[t]× = [[0,0,0],[0,0,-0.2],[0,0.2,0]]. Since R = I, this is also the requested representative of E. With the standard world-to-camera translation -t, the essential matrix has the opposite sign, which is projectively equivalent."},{"id":"practice_q18_b_value","type":"numerical","title":"Q18(b) — Epipolar constraint value","points":1,"stimulusId":"practice_q18_context","prompt":"Evaluate the scalar x2^T E x1.","numeric":{"mode":"exact","value":0,"tolerance":0.000001,"min":0,"max":0,"figures":3},"solution":"E x1 = (0,-0.2,0.01)^T. Dotting with x2 gives 0.06×0 + 0.05×(-0.2) + 1×0.01 = 0."},{"id":"practice_q18_b_verify","type":"essay","title":"Q18(b) — Verify the epipolar constraint","points":2,"stimulusId":"practice_q18_context","prompt":"Show the multiplication E x1 and then x2^T E x1 to verify the epipolar constraint.","solution":"E x1 = (0,-0.2,0.01)^T. Then x2^T E x1 = 0 - 0.01 + 0.01 = 0. The image points satisfy the epipolar constraint."},{"id":"practice_q18_c_x","type":"numerical","title":"Q18(c) — Triangulated X","points":0.5,"stimulusId":"practice_q18_context","prompt":"Triangulate the point. Enter its X-coordinate in metres relative to Camera 1.","numeric":{"mode":"exact","value":0.5,"tolerance":0.001,"min":0,"max":0,"figures":3},"solution":"Normalised disparity d = 0.10-0.06 = 0.04. Z = 0.2/0.04 = 5 m; X = 0.10×5 = 0.5 m."},{"id":"practice_q18_c_y","type":"numerical","title":"Q18(c) — Triangulated Y","points":0.5,"stimulusId":"practice_q18_context","prompt":"Triangulate the point. Enter its Y-coordinate in metres relative to Camera 1.","numeric":{"mode":"exact","value":0.25,"tolerance":0.001,"min":0,"max":0,"figures":3},"solution":"Z = 0.2/(0.10-0.06) = 5 m. Y = 0.05×5 = 0.25 m."},{"id":"practice_q18_c_z","type":"numerical","title":"Q18(c) — Triangulated Z","points":1,"stimulusId":"practice_q18_context","prompt":"Triangulate the point. Enter its Z-coordinate in metres relative to Camera 1.","numeric":{"mode":"exact","value":5,"tolerance":0.001,"min":0,"max":0,"figures":3},"solution":"For normalised coordinates f = 1. Z = B/(x1-x2) = 0.2/(0.10-0.06) = 5 m."},{"id":"practice_q18_c_chirality","type":"essay","title":"Q18(c) — Verify chirality","points":2,"stimulusId":"practice_q18_context","prompt":"Verify that the triangulated point has positive depth in both cameras. Show the point in both camera coordinate systems.","solution":"P1 = (0.5,0.25,5) m. P2 = P1-t = (0.3,0.25,5) m. Z1 = Z2 = 5 > 0, so the point lies in front of both cameras."},{"id":"practice_q19_context","type":"stimulus","title":"Q19 — Shared vehicle stereo specifications","points":0,"stimulusId":"","solution":"","prompt":"An autonomous vehicle's stereo camera has f = 1500 pixels, baseline B = 0.40 m, and sensor resolution 1920 × 1080 pixels.\nFor depth uncertainty, use the first-order relation |ΔZ| ≈ Z^2 |Δd|/(fB). The disparity-error magnitude is 0.5 px where specified."},{"id":"practice_q19_a","type":"numerical","title":"Q19(a) — Pedestrian distance","points":2,"stimulusId":"practice_q19_context","prompt":"A pedestrian produces disparity d = 30.0 px. Calculate the distance Z in metres.","numeric":{"mode":"exact","value":20,"tolerance":0.01,"min":0,"max":0,"figures":3},"solution":"Z = fB/d = 1500×0.40/30 = 20 m."},{"id":"practice_q19_b_10","type":"numerical","title":"Q19(b) — Uncertainty at 10 m","points":2,"stimulusId":"practice_q19_context","prompt":"For disparity error Δd = ±0.5 px, calculate the depth-uncertainty magnitude at Z = 10.0 m. Enter metres, to three decimal places.","numeric":{"mode":"exact","value":0.08333333333333333,"tolerance":0.0005,"min":0,"max":0,"figures":3},"solution":"|ΔZ| ≈ 10^2×0.5/(1500×0.40) = 100/1200 = 0.083333... m, or 0.083 m."},{"id":"practice_q19_b_40","type":"numerical","title":"Q19(b) — Uncertainty at 40 m","points":2,"stimulusId":"practice_q19_context","prompt":"For disparity error Δd = ±0.5 px, calculate the depth-uncertainty magnitude at Z = 40.0 m. Enter metres, to two decimal places.","numeric":{"mode":"exact","value":1.3333333333333333,"tolerance":0.005,"min":0,"max":0,"figures":3},"solution":"|ΔZ| ≈ 40^2×0.5/(1500×0.40) = 1600/1200 = 1.33333... m, or 1.33 m."},{"id":"practice_q19_c","type":"numerical","title":"Q19(c) — Minimum baseline","points":4,"stimulusId":"practice_q19_context","prompt":"The braking system requires |ΔZ| ≤ 1.5 m at Z = 30.0 m. With f = 1500 px and |Δd| = 0.5 px unchanged, determine the minimum required baseline in metres.","numeric":{"mode":"exact","value":0.2,"tolerance":0.0005,"min":0,"max":0,"figures":3},"solution":"Z^2 |Δd|/(fB) ≤ 1.5 implies B ≥ Z^2 |Δd|/(1.5f) = 900×0.5/(1.5×1500) = 0.20 m. This is the minimum; the given 0.40 m baseline already exceeds it."},{"id":"practice_q20_context","type":"stimulus","title":"Q20 — Shared DLT projection matrix","points":0,"stimulusId":"","solution":"","prompt":"DLT yields P = [[800, 0, 320, -1600], [0, 800, 240, -1200], [0, 0, 1, -5]].\nUse P = K[R | t] and denote its left 3 × 3 submatrix by M and its last column by p4.\nPositions and translations are in the unspecified world-coordinate units used by P; focal lengths and principal-point coordinates are in pixels."},{"id":"practice_q20_a_x","type":"numerical","title":"Q20(a) — Optical centre X0","points":1,"stimulusId":"practice_q20_context","prompt":"Solve P(X0,Y0,Z0,1)^T = 0. Enter X0 in world-coordinate units.","numeric":{"mode":"exact","value":0,"tolerance":0.000001,"min":0,"max":0,"figures":3},"solution":"Row 3 gives Z0 = 5. Row 1 gives 800X0 + 320×5 - 1600 = 0, so X0 = 0."},{"id":"practice_q20_a_y","type":"numerical","title":"Q20(a) — Optical centre Y0","points":1,"stimulusId":"practice_q20_context","prompt":"Solve P(X0,Y0,Z0,1)^T = 0. Enter Y0 in world-coordinate units.","numeric":{"mode":"exact","value":0,"tolerance":0.000001,"min":0,"max":0,"figures":3},"solution":"Row 3 gives Z0 = 5. Row 2 gives 800Y0 + 240×5 - 1200 = 0, so Y0 = 0."},{"id":"practice_q20_a_z","type":"numerical","title":"Q20(a) — Optical centre Z0","points":2,"stimulusId":"practice_q20_context","prompt":"Solve P(X0,Y0,Z0,1)^T = 0. Enter Z0 in world-coordinate units.","numeric":{"mode":"exact","value":5,"tolerance":0.000001,"min":0,"max":0,"figures":3},"solution":"The last row of P(X0,Y0,Z0,1)^T = 0 is Z0 - 5 = 0. Thus Z0 = 5 and Cw = (0,0,5)."},{"id":"practice_q20_b","type":"essay","title":"Q20(b) — Intrinsic and rotation decomposition","points":3,"stimulusId":"practice_q20_context","prompt":"Decompose M into K R, using positive focal lengths and K33 = 1. State K, R, the focal lengths, principal point and Euler rotation angles.","solution":"M is already upper triangular with positive diagonal: K = [[800,0,320],[0,800,240],[0,0,1]] and R = I.\nfx = fy = 800 px; (cx,cy) = (320,240) px. Euler rotation angles are all zero."},{"id":"practice_q20_c_tx","type":"numerical","title":"Q20(c) — Translation tx","points":0.5,"stimulusId":"practice_q20_context","prompt":"Solve p4 = Kt. Enter tx in world-coordinate units.","numeric":{"mode":"exact","value":0,"tolerance":0.000001,"min":0,"max":0,"figures":3},"solution":"tz = -5. Row 1 gives 800tx + 320(-5) = -1600, so tx = 0."},{"id":"practice_q20_c_ty","type":"numerical","title":"Q20(c) — Translation ty","points":0.5,"stimulusId":"practice_q20_context","prompt":"Solve p4 = Kt. Enter ty in world-coordinate units.","numeric":{"mode":"exact","value":0,"tolerance":0.000001,"min":0,"max":0,"figures":3},"solution":"tz = -5. Row 2 gives 800ty + 240(-5) = -1200, so ty = 0."},{"id":"practice_q20_c_tz","type":"numerical","title":"Q20(c) — Translation tz","points":0.5,"stimulusId":"practice_q20_context","prompt":"Solve p4 = Kt. Enter tz in world-coordinate units.","numeric":{"mode":"exact","value":-5,"tolerance":0.000001,"min":0,"max":0,"figures":3},"solution":"The third row of Kt = p4 directly gives tz = -5. Thus t = (0,0,-5)."},{"id":"practice_q20_c_verify","type":"essay","title":"Q20(c) — Verify the optical centre","points":1.5,"stimulusId":"practice_q20_context","prompt":"Using the recovered R and t, verify Cw = -R^T t and check that its homogeneous vector lies in the null space of P.","solution":"R = I and t = (0,0,-5), so -R^T t = (0,0,5) = Cw. Multiplying P by (0,0,5,1)^T gives (1600-1600,1200-1200,5-5)^T = (0,0,0)^T."}]}</script>
+  <script>/* Portable QTI authoring model and offline ZIP writer. No network or dependencies. */
+(function (root) {
+  "use strict";
+  const TYPES = {
+    multiple_choice: "Multiple choice", multiple_answers: "Multiple answers",
+    true_false: "True / false", short_answer: "Short answer",
+    fill_in_multiple_blanks: "Multiple blanks", multiple_dropdowns: "Multiple dropdowns",
+    matching: "Matching", numerical: "Numerical", calculated: "Formula",
+    essay: "Essay", file_upload: "File upload", text_only: "Information",
+    ordering: "Ordering", categorization: "Categorisation", hotspot: "Hotspot",
+    stimulus: "Shared stimulus"
+  };
+  const ADVANCED = ["ordering", "categorization", "hotspot", "stimulus"];
+  const QTI21 = "http://www.imsglobal.org/xsd/imsqti_v2p1";
+  const QTI12 = "http://www.imsglobal.org/xsd/ims_qtiasiv1p2";
+  const encoder = new TextEncoder();
+  const x = value => String(value).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[c]);
+  const tag = (name, attrs = {}, body = "") =>
+    `<${name}${Object.entries(attrs).map(([k, v]) => ` ${k}="${x(v)}"`).join("")}>${body}</${name}>`;
+  const p = value => String(value).split(/\n\s*\n/).map(line =>
+    `<p>${x(line).replace(/\n/g, "<br/>")}</p>`).join("");
+  const xml = body => '<?xml version="1.0" encoding="UTF-8"?>\n' + body;
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const unique = values => new Set(values.map(v => v.trim().toLowerCase())).size === values.length;
+  const validText = s => typeof s === "string" &&
+    !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]/u.test(s) &&
+    !/[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/u.test(s);
+  const finite = value => typeof value === "number" && Number.isFinite(value) && Math.abs(value) <= 1e100;
+  let serial = 0;
+  function id() {
+    return "q_" + Date.now().toString(36) + "_" + (++serial).toString(36) +
+      "_" + Math.random().toString(36).slice(2, 8);
+  }
+  function question(type = "multiple_choice") {
+    const q = { id: id(), type, title: "", prompt: "", points: 1, solution: "", stimulusId: "" };
+    if (["multiple_choice", "multiple_answers"].includes(type))
+      q.choices = [{ text: "", correct: false }, { text: "", correct: false }];
+    if (type === "true_false") q.answer = true;
+    if (type === "short_answer") q.answers = [""];
+    if (["fill_in_multiple_blanks", "multiple_dropdowns"].includes(type))
+      q.blanks = [{ name: "blank1", answers: [""], choices: [{ text: "", correct: false }, { text: "", correct: false }] }];
+    if (type === "matching") {
+      q.pairs = [{ left: "", right: "" }, { left: "", right: "" }];
+      q.distractors = [];
+    }
+    if (type === "numerical") q.numeric = { mode: "exact", value: 0, tolerance: 0.01, min: 0, max: 1, figures: 3 };
+    if (type === "ordering") q.items = ["", ""];
+    if (type === "categorization") q.categories = [{ name: "", items: [""] }, { name: "", items: [""] }];
+    if (type === "hotspot") q.image = { data: "", name: "", width: 0, height: 0, alt: "", rect: null };
+    if (type === "calculated") {
+      q.formula = "a * b";
+      q.variables = [{ name: "a", min: 1, max: 10, decimals: 0 }, { name: "b", min: 1, max: 10, decimals: 0 }];
+      q.samples = 5; q.decimalPlaces = 2; q.tolerance = 0.01;
+    }
+    if (["text_only", "stimulus"].includes(type)) q.points = 0;
+    return q;
+  }
+  function project() {
+    return { format: "canvas-browser-v1", title: "Untitled question bank", questions: [] };
+  }
+  function shape(bank) {
+    const fail = s => { throw new Error(s); };
+    if (!bank || typeof bank !== "object" || bank.format !== "canvas-browser-v1" ||
+        typeof bank.title !== "string" || !Array.isArray(bank.questions))
+      fail("Not a canvas-browser-v1 project. Load a project saved by this editor.");
+    if (bank.questions.length > 500) fail("A project can contain at most 500 entries.");
+    function strings(values, label) {
+      if (!Array.isArray(values) || values.length > 1000 || values.some(v => typeof v !== "string"))
+        fail(`${label} must be a list of text values.`);
+    }
+    function rows(values, names, label) {
+      if (!Array.isArray(values) || values.length > 1000) fail(`${label} must be a list.`);
+      for (const row of values) {
+        if (!row || typeof row !== "object" || names.some(n => typeof row[n] !== "string"))
+          fail(`${label} contains an invalid row.`);
+      }
+    }
+    function choiceRows(values) {
+      rows(values, ["text"], "Choices");
+      if (values.some(v => typeof v.correct !== "boolean")) fail("Choice flags must be booleans.");
+    }
+    const ids = new Set();
+    for (const q of bank.questions) {
+      if (!q || !Object.hasOwn(TYPES, q.type) || typeof q.id !== "string" ||
+          !/^[A-Za-z][A-Za-z0-9_]{0,100}$/.test(q.id) || ids.has(q.id))
+        fail("Question types and unique IDs must be valid.");
+      ids.add(q.id);
+      for (const key of ["title", "prompt", "solution", "stimulusId"])
+        if (typeof q[key] !== "string") fail(`${q.id}: missing text field ${key}.`);
+      if (typeof q.points !== "number") fail(`${q.id}: points must be a number.`);
+      if (["multiple_choice", "multiple_answers"].includes(q.type)) choiceRows(q.choices);
+      if (q.type === "true_false" && typeof q.answer !== "boolean") fail("True/false answer must be a boolean.");
+      if (q.type === "short_answer") strings(q.answers, "Answers");
+      if (["fill_in_multiple_blanks", "multiple_dropdowns"].includes(q.type)) {
+        rows(q.blanks, ["name"], "Blanks");
+        for (const b of q.blanks) { strings(b.answers, "Blank answers"); choiceRows(b.choices); }
+      }
+      if (q.type === "matching") { rows(q.pairs, ["left", "right"], "Pairs"); strings(q.distractors, "Distractors"); }
+      if (q.type === "ordering") strings(q.items, "Ordering items");
+      if (q.type === "categorization") {
+        rows(q.categories, ["name"], "Categories");
+        for (const c of q.categories) strings(c.items, "Category items");
+      }
+      if (q.type === "numerical") {
+        if (!q.numeric || !["exact", "range", "precision"].includes(q.numeric.mode) ||
+            ["value", "tolerance", "min", "max", "figures"].some(k => typeof q.numeric[k] !== "number"))
+          fail("Numerical settings are invalid.");
+      }
+      if (q.type === "calculated") {
+        if (typeof q.formula !== "string" ||
+            ["samples", "decimalPlaces", "tolerance"].some(k => typeof q[k] !== "number"))
+          fail("Formula settings are invalid.");
+        rows(q.variables, ["name"], "Variables");
+        for (const v of q.variables)
+          if (["min", "max", "decimals"].some(k => typeof v[k] !== "number")) fail("Variable settings must be numbers.");
+      }
+      if (q.type === "hotspot") {
+        const im = q.image;
+        if (!im || ["data", "name", "alt"].some(k => typeof im[k] !== "string") ||
+            typeof im.width !== "number" || typeof im.height !== "number" ||
+            (im.rect !== null && (!Array.isArray(im.rect) || im.rect.length !== 4 || im.rect.some(v => typeof v !== "number"))))
+          fail("Hotspot image settings are invalid.");
+        if (im.data) imageBytes(im);
+      }
+    }
+    function scan(value) {
+      if (typeof value === "string" && !validText(value)) fail("Text contains an invalid XML character.");
+      if (Array.isArray(value)) value.forEach(scan);
+      else if (value && typeof value === "object") Object.values(value).forEach(scan);
+    }
+    scan(bank);
+    return bank;
+  }
+  function validate(bank, target = "new") {
+    const errors = [];
+    try { shape(bank); } catch (e) { return [e.message]; }
+    if (!["new", "classic"].includes(target)) return ["Unknown export target."];
+    if (!bank.title.trim()) errors.push("Enter a bank title.");
+    if (!bank.questions.length) errors.push("Add at least one question.");
+    const stimuli = new Set(bank.questions.filter(q => q.type === "stimulus").map(q => q.id));
+    const names = values => values.length > 0 && values.every(v => v.trim()) && unique(values);
+    for (let index = 0; index < bank.questions.length; index++) {
+      const q = bank.questions[index], prefix = `${index + 1}. ${q.title || TYPES[q.type]}: `;
+      const error = s => errors.push(prefix + s);
+      if (!q.title.trim()) error("enter a title.");
+      if (!q.prompt.trim()) error("enter the question text.");
+      const info = ["text_only", "stimulus"].includes(q.type);
+      if (!finite(q.points) || (info ? q.points !== 0 : q.points <= 0))
+        error(info ? "information/stimulus must have zero points." : "points must be a positive finite number.");
+      if (q.stimulusId && (!stimuli.has(q.stimulusId) || info)) error("select an existing stimulus for a scored question.");
+      if (target === "classic" && ADVANCED.includes(q.type))
+        error(`${TYPES[q.type]} is not supported in Classic; use New Quizzes export or change the question type.`);
+      function checkChoices(cs, multiple = false) {
+        if (cs.length < 2 || !names(cs.map(c => c.text))) error("use at least two unique, non-empty choices.");
+        const correct = cs.filter(c => c.correct).length;
+        if (multiple ? correct < 1 : correct !== 1) error(multiple ? "mark at least one correct choice." : "mark exactly one correct choice.");
+      }
+      if (["multiple_choice", "multiple_answers"].includes(q.type)) checkChoices(q.choices, q.type === "multiple_answers");
+      if (q.type === "short_answer" && !names(q.answers)) error("enter unique accepted answers.");
+      if (["fill_in_multiple_blanks", "multiple_dropdowns"].includes(q.type)) {
+        const placeholders = [...q.prompt.matchAll(/\[([A-Za-z][A-Za-z0-9_]*)\]/g)].map(m => m[1]);
+        const ids = q.blanks.map(b => b.name);
+        if (!names(ids) || ids.some(n => !/^[A-Za-z][A-Za-z0-9_]*$/.test(n)) ||
+            placeholders.length !== ids.length || new Set(placeholders).size !== ids.length ||
+            ids.some(n => !placeholders.includes(n)))
+          error("each [placeholder] must occur once and match a unique blank name.");
+        q.blanks.forEach(b => {
+          if (q.type === "multiple_dropdowns") checkChoices(b.choices);
+          else if (!names(b.answers)) error(`blank ${b.name}: enter unique accepted answers.`);
+        });
+      }
+      if (q.type === "matching") {
+        if (q.pairs.length < 2 || !names(q.pairs.map(v => v.left)) || q.pairs.some(v => !v.right.trim()))
+          error("enter at least two pairs with unique left-hand labels.");
+        const rights = q.pairs.map(v => v.right.trim().toLowerCase());
+        if (q.distractors.length && (!names(q.distractors) || q.distractors.some(v => rights.includes(v.trim().toLowerCase()))))
+          error("distractors must be unique and different from correct answers.");
+      }
+      if (q.type === "numerical") {
+        const n = q.numeric;
+        if (Object.entries(n).some(([k, v]) => k !== "mode" && !finite(v))) error("numerical settings must be finite.");
+        if (n.mode === "exact" && n.tolerance < 0) error("tolerance must not be negative.");
+        if (n.mode === "range" && n.min > n.max) error("range minimum exceeds maximum.");
+        if (n.mode === "precision" && (!Number.isInteger(n.figures) || n.figures < 1 || n.figures > 15 || n.value === 0))
+          error("precision needs a non-zero value and 1 to 15 significant figures.");
+      }
+      if (q.type === "ordering" && (q.items.length < 2 || !names(q.items)))
+        error("enter at least two unique steps in the correct order.");
+      if (q.type === "categorization" &&
+          (q.categories.length < 2 || !names(q.categories.map(c => c.name)) ||
+           q.categories.some(c => !names(c.items)) || !unique(q.categories.flatMap(c => c.items))))
+        error("enter at least two unique categories, each with items; item labels must be unique.");
+      if (q.type === "hotspot") {
+        const im = q.image, r = im.rect;
+        if (!im.data || !im.alt.trim()) error("upload an image and enter alternative text.");
+        if (![im.width, im.height].every(v => Number.isInteger(v) && v > 0 && v <= 8000)) error("image dimensions must be 1 to 8000 pixels.");
+        if (!r || r.some(v => !Number.isInteger(v) || v < 0) ||
+            (r && (r[0] >= r[2] || r[1] >= r[3] || r[2] > im.width || r[3] > im.height)))
+          error("draw a non-empty correct rectangle inside the image.");
+      }
+      if (q.type === "calculated") {
+        try { formulaSets(q); } catch (e) { error(e.message); }
+      }
+      if (q.type === "stimulus" && !bank.questions.some(other => other.stimulusId === q.id))
+        error("link at least one question to this stimulus.");
+    }
+    return errors;
+  }
+  function notices(bank, target) {
+    const result = [];
+    if (target === "new") {
+      result.push("Portable QTI 2.1: import into an empty New Quiz and test before publishing. Native Canvas interpretation is not certified.");
+      if (bank.questions.some(q => q.type === "categorization"))
+        result.push("Categorisation uses a standard many-to-one matching interaction. Canvas may display it as Matching, not native Categorisation.");
+      if (bank.questions.some(q => q.type === "ordering" || q.type === "hotspot"))
+        result.push("Ordering and hotspots use standard QTI 2.1 interactions. Their recognition by your Canvas New Quizzes importer must be checked.");
+      if (bank.questions.some(q => q.type === "stimulus"))
+        result.push("Shared stimulus text is repeated inside each linked question, not imported as a native linked Canvas stimulus.");
+      if (bank.questions.some(q => q.type === "calculated"))
+        result.push("Each formula sample becomes a separate numerical question. This increases the item count/total points; choose variants from the imported bank. It is not a native randomised Formula item.");
+      if (bank.questions.some(q => q.type === "text_only"))
+        result.push("Information is exported as a non-interactive QTI item; check how Canvas displays it.");
+      result.push("Portable auto-scoring is all-or-nothing per question. Canvas may apply its own policies. Essay/file-upload items require manual grading.");
+    } else {
+      result.push("Classic QTI 1.2: inspect scoring and visibility after import. Multiple answers, matching and blanks use Canvas Classic conventions.");
+    }
+    result.push("Instructor solutions are kept in the saved project only, not in the QTI ZIP. Correct response keys are necessarily included in QTI; keep ZIPs private.");
+    return result;
+  }
+  // Recursive-descent arithmetic parser: no eval/Function, assignments, calls or property access.
+  function formula(expression, variables) {
+    if (expression.length > 500) throw new Error("Formula is limited to 500 characters.");
+    const tokens = expression.replace(/\*\*/g, "^").match(/(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?|[A-Za-z][A-Za-z0-9_]*|[()+\-*/^]|\S/g) || [];
+    let position = 0;
+    const used = new Set();
+    function checked(value) {
+      if (!finite(value)) throw new Error("Formula result is not finite or is too large.");
+      return value;
+    }
+    function atom() {
+      const token = tokens[position++];
+      if (token === "(") {
+        const v = sum();
+        if (tokens[position++] !== ")") throw new Error("Missing closing parenthesis.");
+        return v;
+      }
+      if (/^(?:\d|\.)/.test(token || "") && finite(Number(token))) return Number(token);
+      if (Object.hasOwn(variables, token)) { used.add(token); return variables[token]; }
+      throw new Error(`Unknown formula token: ${token || "(end)"}.`);
+    }
+    function power() {
+      const a = atom();
+      if (tokens[position] !== "^") return a;
+      position++;
+      const b = unary();
+      if (Math.abs(b) > 100) throw new Error("Exponent magnitude must not exceed 100.");
+      return checked(Math.pow(a, b));
+    }
+    function unary() {
+      if (tokens[position] === "+") { position++; return unary(); }
+      if (tokens[position] === "-") { position++; return -unary(); }
+      return power();
+    }
+    function product() {
+      let a = unary();
+      while (tokens[position] === "*" || tokens[position] === "/") {
+        const op = tokens[position++], b = unary();
+        if (op === "/" && b === 0) throw new Error("Formula divides by zero.");
+        a = checked(op === "*" ? a * b : a / b);
+      }
+      return a;
+    }
+    function sum() {
+      let a = product();
+      while (tokens[position] === "+" || tokens[position] === "-") {
+        const op = tokens[position++], b = product();
+        a = checked(op === "+" ? a + b : a - b);
+      }
+      return a;
+    }
+    const value = sum();
+    if (position !== tokens.length) throw new Error("Unexpected formula token: " + tokens[position]);
+    if (Object.keys(variables).some(name => !used.has(name))) throw new Error("Use every declared variable in the formula.");
+    return checked(value);
+  }
+  function formulaSets(q) {
+    if (!Number.isInteger(q.samples) || q.samples < 1 || q.samples > 100 ||
+        !Number.isInteger(q.decimalPlaces) || q.decimalPlaces < 0 || q.decimalPlaces > 10 ||
+        !finite(q.tolerance) || q.tolerance < 0)
+      throw new Error("Use 1 to 100 samples, 0 to 10 answer decimal places, and a non-negative tolerance.");
+    if (!q.variables.length || q.variables.length > 20 || !unique(q.variables.map(v => v.name)))
+      throw new Error("Use 1 to 20 uniquely named variables.");
+    const placeholders = new Set([...q.prompt.matchAll(/\[([A-Za-z][A-Za-z0-9_]*)\]/g)].map(m => m[1]));
+    for (const v of q.variables) {
+      if (!/^[A-Za-z][A-Za-z0-9_]*$/.test(v.name) || !placeholders.has(v.name))
+        throw new Error("Use valid variable names with matching [placeholders] in the prompt.");
+      if (!finite(v.min) || !finite(v.max) || v.min > v.max || !Number.isInteger(v.decimals) || v.decimals < 0 || v.decimals > 8)
+        throw new Error("Check variable ranges and decimals (0 to 8).");
+      const scale = 10 ** v.decimals;
+      if ([v.min, v.max].some(n => Math.abs(n * scale - Math.round(n * scale)) > 1e-6 ||
+          !Number.isSafeInteger(Math.round(n * scale))) ||
+          !Number.isSafeInteger(Math.round(v.max * scale) - Math.round(v.min * scale) + 1))
+        throw new Error("Variable endpoints must fit the decimal grid and safe integer range.");
+    }
+    if (placeholders.size !== q.variables.length) throw new Error("Every [placeholder] must name a variable.");
+    let seed = 2166136261;
+    for (const char of q.id) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619) >>> 0;
+    const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
+    return Array.from({ length: q.samples }, () => {
+      const values = {};
+      for (const v of q.variables) {
+        const scale = 10 ** v.decimals, lo = Math.round(v.min * scale), hi = Math.round(v.max * scale);
+        values[v.name] = (lo + Math.floor(random() * (hi - lo + 1))) / scale;
+      }
+      return { values, answer: Number(formula(q.formula, values).toFixed(q.decimalPlaces)) };
+    });
+  }
+  function imageBytes(image) {
+    const match = /^data:image\/(png|jpeg);base64,([A-Za-z0-9+/]+={0,2})$/.exec(image.data);
+    if (!match || match[2].length > 7 * 1024 * 1024) throw new Error("Hotspots accept PNG/JPEG images up to 5 MB.");
+    let bytes;
+    try { bytes = Uint8Array.from(atob(match[2]), c => c.charCodeAt(0)); }
+    catch { throw new Error("Invalid image base64 data."); }
+    const good = match[1] === "png" ?
+      [137, 80, 78, 71, 13, 10, 26, 10].every((v, i) => bytes[i] === v) :
+      bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
+    if (!good || bytes.length > 5 * 1024 * 1024) throw new Error("Invalid or oversized PNG/JPEG image.");
+    return { bytes, extension: match[1] === "png" ? "png" : "jpg" };
+  }
+  function bounds(n) {
+    if (n.mode === "range") return { low: n.min, high: n.max, exclusive: false };
+    const tolerance = n.mode === "exact" ? n.tolerance :
+      0.5 * 10 ** (Math.floor(Math.log10(Math.abs(n.value))) - n.figures + 1);
+    const clean = v => Number(v.toPrecision(15));
+    return { low: clean(n.value - tolerance), high: clean(n.value + tolerance), exclusive: n.mode === "precision" };
+  }
+  function prepared(bank, target) {
+    const stimuli = new Map(bank.questions.filter(q => q.type === "stimulus").map(q => [q.id, q]));
+    return bank.questions.filter(q => q.type !== "stimulus").flatMap(original => {
+      const q = clone(original);
+      q.context = q.stimulusId ? stimuli.get(q.stimulusId).prompt : "";
+      if (q.type !== "calculated" || target === "classic") return [q];
+      return formulaSets(q).map((set, index) => ({
+        ...q, id: q.id + "_v" + (index + 1), type: "numerical",
+        title: q.title + ` - variant ${index + 1}`,
+        prompt: q.prompt.replace(/\[([A-Za-z][A-Za-z0-9_]*)\]/g, (_, name) => String(set.values[name])),
+        numeric: { mode: "exact", value: set.answer, tolerance: q.tolerance, min: 0, max: 1, figures: 3 }
+      }));
+    });
+  }
+  function declaration(identifier, baseType, values, cardinality = "single") {
+    return tag("responseDeclaration", { identifier, cardinality, baseType },
+      values.length ? tag("correctResponse", {}, values.map(v => tag("value", {}, x(v))).join("")) : "");
+  }
+  const variable = id => tag("variable", { identifier: id });
+  const base = (value, type = "float") => tag("baseValue", { baseType: type }, x(value));
+  const matchCorrect = id => tag("match", {}, variable(id) + tag("correct", { identifier: id }));
+  function testNumeric(n, response) {
+    const b = bounds(n);
+    return tag("and", {},
+      tag(b.exclusive ? "gt" : "gte", {}, variable(response) + base(b.low)) +
+      tag("lte", {}, variable(response) + base(b.high)));
+  }
+  function testText(answers, response) {
+    const parts = answers.map(answer =>
+      tag("stringMatch", { caseSensitive: "false", substring: "false" }, variable(response) + base(answer, "string")));
+    return parts.length === 1 ? parts[0] : tag("or", {}, parts.join(""));
+  }
+  function item21(q, files) {
+    const declarations = [], checks = [];
+    let body = (q.context ? tag("div", { class: "stimulus-context" }, p(q.context)) : "") + p(q.prompt);
+    const response = "RESPONSE";
+    function select(cs, multiple = false) {
+      declarations.push(declaration(response, "identifier", cs.flatMap((c, i) => c.correct ? ["a" + i] : []),
+        multiple ? "multiple" : "single"));
+      checks.push(matchCorrect(response));
+      body += tag("choiceInteraction", { responseIdentifier: response, shuffle: "false",
+        maxChoices: multiple ? cs.length : 1 },
+      cs.map((c, i) => tag("simpleChoice", { identifier: "a" + i }, x(c.text))).join(""));
+    }
+    if (["multiple_choice", "multiple_answers"].includes(q.type)) select(q.choices, q.type === "multiple_answers");
+    else if (q.type === "true_false") select([{ text: "True", correct: q.answer }, { text: "False", correct: !q.answer }]);
+    else if (q.type === "short_answer") {
+      declarations.push(declaration(response, "string", [q.answers[0]]));
+      checks.push(testText(q.answers, response));
+      body += tag("p", {}, tag("textEntryInteraction", { responseIdentifier: response, expectedLength: "40" }));
+    } else if (q.type === "numerical") {
+      const n = q.numeric;
+      declarations.push(declaration(response, "float", [n.mode === "range" ? (n.min + n.max) / 2 : n.value]));
+      checks.push(testNumeric(n, response));
+      body += tag("p", {}, tag("textEntryInteraction", { responseIdentifier: response, expectedLength: "15" }));
+    } else if (["fill_in_multiple_blanks", "multiple_dropdowns"].includes(q.type)) {
+      const used = new Set();
+      body = (q.context ? p(q.context) : "") + "<p>" +
+        x(q.prompt).replace(/\n/g, "<br/>").replace(/\[([A-Za-z][A-Za-z0-9_]*)\]/g, (_, name) => {
+          const b = q.blanks.find(v => v.name === name), rid = "blank_" + name;
+          // Repeated occurrences refer to the same response, but only declare it once.
+          if (!used.has(name)) {
+            used.add(name);
+            if (q.type === "multiple_dropdowns") {
+              declarations.push(declaration(rid, "identifier", [String(b.choices.findIndex(c => c.correct))].map(i => "a" + i)));
+              checks.push(matchCorrect(rid));
+            } else {
+              declarations.push(declaration(rid, "string", [b.answers[0]]));
+              checks.push(testText(b.answers, rid));
+            }
+          }
+          return q.type === "multiple_dropdowns" ?
+            tag("inlineChoiceInteraction", { responseIdentifier: rid, shuffle: "false" },
+              b.choices.map((c, i) => tag("inlineChoice", { identifier: "a" + i }, x(c.text))).join("")) :
+            tag("textEntryInteraction", { responseIdentifier: rid, expectedLength: "20" });
+        }) + "</p>";
+    } else if (q.type === "ordering") {
+      declarations.push(declaration(response, "identifier", q.items.map((_, i) => "a" + i), "ordered"));
+      checks.push(matchCorrect(response));
+      body += tag("orderInteraction", { responseIdentifier: response, shuffle: "true" },
+        q.items.map((v, i) => tag("simpleChoice", { identifier: "a" + i }, x(v))).join(""));
+    } else if (["matching", "categorization"].includes(q.type)) {
+      const pairs = q.type === "matching" ? q.pairs :
+        q.categories.flatMap(c => c.items.map(label => ({ left: label, right: c.name })));
+      const rights = [...new Set(pairs.map(v => v.right))].concat(q.type === "matching" ? q.distractors : []);
+      const correct = pairs.map((v, i) => `l${i} r${rights.indexOf(v.right)}`);
+      declarations.push(declaration(response, "directedPair", correct, "multiple"));
+      checks.push(matchCorrect(response));
+      body += tag("matchInteraction", { responseIdentifier: response, shuffle: "false", maxAssociations: pairs.length },
+        tag("simpleMatchSet", {}, pairs.map((v, i) =>
+          tag("simpleAssociableChoice", { identifier: "l" + i, matchMax: "1" }, x(v.left))).join("")) +
+        tag("simpleMatchSet", {}, rights.map((v, i) =>
+          tag("simpleAssociableChoice", { identifier: "r" + i, matchMax: pairs.length }, x(v))).join("")));
+    } else if (q.type === "hotspot") {
+      const { bytes, extension } = imageBytes(q.image), path = `items/${q.id}.${extension}`;
+      files[path] = bytes;
+      declarations.push(declaration(response, "identifier", ["correct_region"]));
+      checks.push(matchCorrect(response));
+      body += tag("hotspotInteraction", { responseIdentifier: response, maxChoices: "1" },
+        tag("object", { data: `${q.id}.${extension}`, type: extension === "png" ? "image/png" : "image/jpeg",
+          width: q.image.width, height: q.image.height }, x(q.image.alt)) +
+        tag("hotspotChoice", { identifier: "correct_region", shape: "rect",
+          coords: q.image.rect.join(","), hotspotLabel: "Selected region" }));
+    } else if (q.type === "essay") {
+      declarations.push(declaration(response, "string", []));
+      body += tag("extendedTextInteraction", { responseIdentifier: response, expectedLines: "8" });
+    } else if (q.type === "file_upload") {
+      declarations.push(declaration(response, "file", []));
+      body += tag("uploadInteraction", { responseIdentifier: response });
+    }
+    const score = tag("outcomeDeclaration", { identifier: "SCORE", cardinality: "single", baseType: "float",
+      normalMinimum: "0", normalMaximum: q.points }, tag("defaultValue", {}, tag("value", {}, "0")));
+    const setScore = value => tag("setOutcomeValue", { identifier: "SCORE" }, base(value));
+    const processing = checks.length ? tag("responseProcessing", {},
+      tag("responseCondition", {},
+        tag("responseIf", {}, (checks.length === 1 ? checks[0] : tag("and", {}, checks.join(""))) + setScore(q.points)) +
+        tag("responseElse", {}, setScore(0)))) : "";
+    return xml(tag("assessmentItem", { xmlns: QTI21, identifier: q.id, title: q.title,
+      adaptive: "false", timeDependent: "false" }, declarations.join("") + score + tag("itemBody", {}, body) + processing));
+  }
+  function meta12(values) {
+    return tag("qtimetadata", {}, Object.entries(values).map(([k, v]) =>
+      tag("qtimetadatafield", {}, tag("fieldlabel", {}, x(k)) + tag("fieldentry", {}, x(v)))).join(""));
+  }
+  const material = value => tag("material", {}, tag("mattext", { texttype: "text/html" }, x(value)));
+  function item12(q) {
+    let interaction = "", processing = "";
+    const rid = "response1";
+    const eq = (value, response = rid) => tag("varequal", { respident: response, case: "No" }, x(value));
+    const cond = (test, value = 100, action = "Set", continuing = "No") =>
+      tag("respcondition", { continue: continuing }, tag("conditionvar", {}, test) +
+        (value === null ? "" : tag("setvar", { varname: "SCORE", action }, String(value))));
+    const choose = (cs, response = rid, label = "", multiple = false) =>
+      tag("response_lid", { ident: response, rcardinality: multiple ? "Multiple" : "Single" },
+        (label ? material(p(label)) : "") + tag("render_choice", {}, cs.map(c =>
+          tag("response_label", { ident: c.id }, material(p(c.text)))).join("")));
+    const fib = decimal => tag("response_str", { ident: rid, rcardinality: "Single" },
+      tag("render_fib", decimal ? { fibtype: "Decimal" } : {}, tag("response_label", { ident: "answer1" })));
+    if (["multiple_choice", "multiple_answers", "true_false"].includes(q.type)) {
+      const cs = (q.type === "true_false" ? [{ text: "True", correct: q.answer }, { text: "False", correct: !q.answer }] : q.choices)
+        .map((c, i) => ({ ...c, id: "a" + i }));
+      interaction = choose(cs, rid, "", q.type === "multiple_answers");
+      processing = cond(q.type === "multiple_answers" ?
+        tag("and", {}, cs.map(c => c.correct ? eq(c.id) : tag("not", {}, eq(c.id))).join("")) :
+        eq(cs.find(c => c.correct).id));
+    } else if (q.type === "short_answer") {
+      interaction = fib(false);
+      processing = cond(q.answers.map(a => eq(a)).join(""));
+    } else if (q.type === "numerical") {
+      interaction = fib(true);
+      const b = bounds(q.numeric), comparisons =
+        tag(b.exclusive ? "vargt" : "vargte", { respident: rid }, String(b.low)) +
+        tag("varlte", { respident: rid }, String(b.high));
+      processing = cond(q.numeric.mode === "range" ? comparisons :
+        tag("or", {}, eq(q.numeric.value) + tag("and", {}, comparisons)));
+    } else if (q.type === "essay" || q.type === "file_upload") {
+      interaction = q.type === "essay" ? fib(false) : "";
+      processing = cond(tag("other"), null);
+    } else if (q.type === "matching") {
+      const rights = [...new Set(q.pairs.map(v => v.right))].concat(q.distractors);
+      const cs = rights.map((text, i) => ({ id: "m" + i, text }));
+      q.pairs.forEach((v, i) => {
+        interaction += choose(cs, "response_p" + i, v.left);
+        processing += cond(eq("m" + rights.indexOf(v.right), "response_p" + i), 100 / q.pairs.length, "Add", "Yes");
+      });
+    } else if (["fill_in_multiple_blanks", "multiple_dropdowns"].includes(q.type)) {
+      q.blanks.forEach((b, i) => {
+        const cs = (q.type === "multiple_dropdowns" ? b.choices : b.answers.map(text => ({ text, correct: true })))
+          .map((v, j) => ({ ...v, id: `b${i}_${j}` }));
+        interaction += choose(cs, "response_" + b.name, b.name);
+        processing += cond(cs.filter(c => c.correct).map(c => eq(c.id, "response_" + b.name)).join(""),
+          100 / q.blanks.length, "Add", "Yes");
+      });
+    } else if (q.type === "calculated") {
+      interaction = fib(true);
+      processing = cond(tag("other"));
+    }
+    let extension = "";
+    if (q.type === "calculated") {
+      extension = tag("itemproc_extension", {}, tag("calculated", {},
+        tag("answer_tolerance", {}, String(q.tolerance)) +
+        tag("formulas", { decimal_places: q.decimalPlaces }, tag("formula", {}, x(q.formula.replace(/\*\*/g, "^")))) +
+        tag("vars", {}, q.variables.map(v => tag("var", { name: v.name, scale: v.decimals },
+          tag("min", {}, String(v.min)) + tag("max", {}, String(v.max)))).join("")) +
+        tag("var_sets", {}, formulaSets(q).map((s, i) => tag("var_set", { ident: "set" + i },
+          Object.entries(s.values).map(([name, value]) => tag("var", { name }, String(value))).join("") +
+          tag("answer", {}, String(s.answer)))).join(""))));
+    }
+    return tag("item", { ident: q.id, title: q.title },
+      tag("itemmetadata", {}, meta12({ question_type: q.type + "_question", points_possible: q.points })) +
+      tag("presentation", {}, material(p(q.prompt)) + interaction) +
+      (q.type === "text_only" ? "" : tag("resprocessing", {},
+        tag("outcomes", {}, tag("decvar", { varname: "SCORE", vartype: "Decimal", minvalue: "0", maxvalue: "100" })) + processing)) + extension);
+  }
+  function build(bank, target = "new") {
+    const errors = validate(bank, target);
+    if (errors.length) throw new Error(errors.join("\n"));
+    const questions = prepared(bank, target), files = {};
+    if (!questions.length) throw new Error("Nothing to export.");
+    const total = questions.reduce((a, q) => a + q.points, 0);
+    let resources = "";
+    if (target === "new") {
+      const refs = questions.map(q => {
+        const path = `items/${q.id}.xml`;
+        files[path] = item21(q, files);
+        const asset = Object.keys(files).find(key => key.startsWith("items/" + q.id + ".") && key !== path);
+        resources += tag("resource", { identifier: q.id, type: "imsqti_item_xmlv2p1", href: path },
+          tag("file", { href: path }) + (asset ? tag("file", { href: asset }) : ""));
+        return tag("assessmentItemRef", { identifier: q.id, href: path });
+      }).join("");
+      files["assessment.xml"] = xml(tag("assessmentTest", { xmlns: QTI21, identifier: "assessment", title: bank.title },
+        tag("testPart", { identifier: "part1", navigationMode: "linear", submissionMode: "individual" },
+          tag("assessmentSection", { identifier: "section1", title: bank.title, visible: "true" }, refs))));
+      resources = tag("resource", { identifier: "assessment", type: "imsqti_test_xmlv2p1", href: "assessment.xml" },
+        tag("file", { href: "assessment.xml" }) + questions.map(q => tag("dependency", { identifierref: q.id })).join("")) + resources;
+      files["imsmanifest.xml"] = xml(tag("manifest", { xmlns: "http://www.imsglobal.org/xsd/imscp_v1p1", identifier: "manifest" },
+        tag("metadata", {}, tag("schema", {}, "IMS Content") + tag("schemaversion", {}, "1.1.4")) +
+        tag("organizations") + tag("resources", {}, resources)));
+    } else {
+      files["assessment/questions.xml"] = xml(tag("questestinterop", { xmlns: QTI12 },
+        tag("assessment", { ident: "assessment", title: bank.title },
+          tag("section", { ident: "section1" }, questions.map(item12).join("")))));
+      files["assessment/assessment_meta.xml"] = xml(tag("quiz", { xmlns: "http://canvas.instructure.com/xsd/cccv1p0", identifier: "assessment" },
+        tag("title", {}, x(bank.title)) + tag("quiz_type", {}, "practice_quiz") + tag("points_possible", {}, String(total)) +
+        tag("available", {}, "false") + tag("hide_results", {}, "always") + tag("show_correct_answers", {}, "false")));
+      resources = tag("resource", { identifier: "assessment", type: "imsqti_xmlv1p2" },
+        tag("file", { href: "assessment/questions.xml" }) + tag("dependency", { identifierref: "quizmeta" })) +
+        tag("resource", { identifier: "quizmeta", type: "associatedcontent/imscc_xmlv1p1/learning-application-resource", href: "assessment/assessment_meta.xml" },
+          tag("file", { href: "assessment/assessment_meta.xml" }));
+      files["imsmanifest.xml"] = xml(tag("manifest", { xmlns: "http://www.imsglobal.org/xsd/imsccv1p1/imscp_v1p1", identifier: "manifest" },
+        tag("metadata", {}, tag("schema", {}, "IMS Content") + tag("schemaversion", {}, "1.1.3")) +
+        tag("organizations") + tag("resources", {}, resources)));
+    }
+    return { files, count: questions.length, points: total, notices: notices(bank, target) };
+  }
+  const crcTable = Array.from({ length: 256 }, (_, value) => {
+    for (let n = 0; n < 8; n++) value = value & 1 ? 0xedb88320 ^ (value >>> 1) : value >>> 1;
+    return value >>> 0;
+  });
+  function crc32(bytes) {
+    let crc = 0xffffffff;
+    for (const value of bytes) crc = crcTable[(crc ^ value) & 255] ^ (crc >>> 8);
+    return (crc ^ 0xffffffff) >>> 0;
+  }
+  function zip(files) {
+    const local = [], central = [];
+    let offset = 0, centralSize = 0, count = 0;
+    const block = size => { const bytes = new Uint8Array(size); return [bytes, new DataView(bytes.buffer)]; };
+    for (const [path, content] of Object.entries(files)) {
+      if (!/^[A-Za-z0-9_./-]+$/.test(path) || path.includes("..") || path.startsWith("/")) throw new Error("Unsafe ZIP path.");
+      const name = encoder.encode(path), bytes = typeof content === "string" ? encoder.encode(content) : content;
+      const crc = crc32(bytes), [header, h] = block(30);
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x800, true);
+      h.setUint16(12, 33, true); // 1980-01-01; reproducible archives
+      h.setUint32(14, crc, true); h.setUint32(18, bytes.length, true); h.setUint32(22, bytes.length, true);
+      h.setUint16(26, name.length, true);
+      local.push(header, name, bytes);
+      const [entry, e] = block(46);
+      e.setUint32(0, 0x02014b50, true); e.setUint16(4, 20, true); e.setUint16(6, 20, true);
+      e.setUint16(8, 0x800, true); e.setUint16(14, 33, true);
+      e.setUint32(16, crc, true); e.setUint32(20, bytes.length, true); e.setUint32(24, bytes.length, true);
+      e.setUint16(28, name.length, true); e.setUint32(42, offset, true);
+      central.push(entry, name); centralSize += 46 + name.length;
+      offset += 30 + name.length + bytes.length; count++;
+      if (offset > 100 * 1024 * 1024 || count > 60000) throw new Error("Archive exceeds the 100 MB / 60000 file limit.");
+    }
+    const [end, e] = block(22);
+    e.setUint32(0, 0x06054b50, true); e.setUint16(8, count, true); e.setUint16(10, count, true);
+    e.setUint32(12, centralSize, true); e.setUint32(16, offset, true);
+    const result = new Uint8Array(offset + centralSize + 22);
+    let cursor = 0;
+    for (const bytes of [...local, ...central, end]) { result.set(bytes, cursor); cursor += bytes.length; }
+    return result;
+  }
+  function example() {
+    const bank = project();
+    bank.title = "Computer vision - browser authoring example";
+    const add = (type, title, prompt, data) => {
+      const q = Object.assign(question(type), { title, prompt }, data);
+      bank.questions.push(q); return q;
+    };
+    add("multiple_choice", "Depth and disparity", "With fixed focal length and baseline, doubling disparity makes depth:",
+      { choices: [{ text: "Twice as large", correct: false }, { text: "Half as large", correct: true }],
+        solution: "Z = fB/d." });
+    add("numerical", "Stereo depth", "f = 1000 px, B = 0.2 m, d = 40 px. Enter depth in metres.",
+      { numeric: { mode: "exact", value: 5, tolerance: 0.01, min: 0, max: 10, figures: 3 } });
+    add("ordering", "Calibration workflow", "Arrange the following operations in order.",
+      { items: ["Collect image/object correspondences", "Normalise the points", "Build the DLT system", "Solve with SVD"] });
+    add("categorization", "Transformation invariants", "Assign each property to the appropriate group.",
+      { categories: [{ name: "Preserved by all invertible homographies", items: ["Collinearity", "Cross-ratio"] },
+        { name: "Not preserved by a general homography", items: ["Angles", "Parallelism"] }] });
+    const stimulus = add("stimulus", "Shared stereo setup", "A rectified stereo rig has f = 1000 px and B = 0.2 m.");
+    add("essay", "Stereo assumptions", "Explain the assumptions behind the relation Z = fB/d.",
+      { stimulusId: stimulus.id, points: 3 });
+    return bank;
+  }
+  const api = { TYPES, ADVANCED, project, question, shape, validate, notices, formula, formulaSets,
+    imageBytes, bounds, prepared, build, zip, crc32, example, clone };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  else root.QuizCore = api;
+})(globalThis);
+</script>
+  <script>(function () {
+  "use strict";
+  const C = globalThis.QuizCore;
+  const $ = id => document.getElementById(id);
+  const legacyStorageKey = "galway-quiz-studio-v1";
+  const storageKey = legacyStorageKey + ":" + location.pathname;
+  let bank = C.project(), selected = "", target = "new", dirty = false, draftTimer, exportResult;
+  function node(tag, attrs = {}, text = "") {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") el.className = v;
+      else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v);
+    }
+    if (text) el.textContent = text;
+    return el;
+  }
+  function button(text, fn, className = "") { return node("button", { onclick: fn, class: className, type: "button" }, text); }
+  function status(text, error = false) { $("status").textContent = text; $("status").className = error ? "error" : ""; }
+  function active() { return bank.questions.find(q => q.id === selected); }
+  function touched() {
+    dirty = true;
+    $("issues").hidden = true;
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(() => {
+      try {
+        const saved = JSON.stringify(bank);
+        C.shape(JSON.parse(saved));
+        localStorage.setItem(storageKey, saved);
+        status("Draft saved in this browser. Download Save project for a durable backup.");
+      } catch (e) {
+        status("Browser draft could not be saved (" + e.message + "). Use Save project to download your work.", true);
+      }
+    }, 350);
+    list(); preview();
+  }
+  function commit(fn) { fn(); touched(); editor(); }
+  function field(label, value, callback, options = {}) {
+    const wrapper = node("label", {}, label);
+    const input = options.area ? node("textarea", { rows: options.rows || 3 }) :
+      node("input", { type: options.number ? "number" : "text" });
+    input.value = value;
+    if (options.number) input.step = options.step || "any";
+    if (options.min !== undefined) input.min = String(options.min);
+    input.addEventListener("input", () => { callback(options.number ? input.valueAsNumber : input.value); touched(); });
+    wrapper.append(input);
+    if (options.help) wrapper.append(node("span", { class: "hint" }, options.help));
+    return wrapper;
+  }
+  function select(label, value, choices, callback) {
+    const wrapper = node("label", {}, label), input = node("select");
+    for (const [id, text] of choices) input.append(node("option", { value: id }, text));
+    input.value = value;
+    input.addEventListener("change", () => commit(() => callback(input.value)));
+    wrapper.append(input); return wrapper;
+  }
+  function panel(title, help = "") {
+    const el = node("section", { class: "field-panel" });
+    el.append(node("h3", {}, title));
+    if (help) el.append(node("p", { class: "hint" }, help));
+    return el;
+  }
+  function textRows(parent, values, label, ordered = false) {
+    values.forEach((value, i) => {
+      const row = node("div", { class: "row" });
+      row.append(node("span", { class: "row-index" }, String(i + 1)));
+      const input = node("input", { type: "text", "aria-label": `${label} ${i + 1}` });
+      input.value = value;
+      input.addEventListener("input", () => { values[i] = input.value; touched(); });
+      row.append(input);
+      if (ordered) {
+        const up = button("↑", () => commit(() => { [values[i - 1], values[i]] = [values[i], values[i - 1]]; }));
+        up.disabled = i === 0; up.setAttribute("aria-label", `Move ${label} ${i + 1} up`); row.append(up);
+        const down = button("↓", () => commit(() => { [values[i + 1], values[i]] = [values[i], values[i + 1]]; }));
+        down.disabled = i === values.length - 1; down.setAttribute("aria-label", `Move ${label} ${i + 1} down`); row.append(down);
+      }
+      const remove = button("Remove", () => commit(() => values.splice(i, 1)));
+      remove.setAttribute("aria-label", `Remove ${label} ${i + 1}`);
+      row.append(remove); parent.append(row);
+    });
+    parent.append(button("+ Add " + label.toLowerCase(), () => commit(() => values.push(""))));
+  }
+  function choiceRows(parent, choices, multiple, group) {
+    choices.forEach((choice, i) => {
+      const row = node("div", { class: "row" }), correct = node("label", { class: "correct" });
+      const mark = node("input", { type: multiple ? "checkbox" : "radio", name: group,
+        "aria-label": `Correct choice ${i + 1}` });
+      mark.checked = choice.correct;
+      mark.addEventListener("change", () => {
+        if (!multiple) choices.forEach(c => { c.correct = false; });
+        choice.correct = mark.checked; touched();
+      });
+      correct.append(mark, document.createTextNode("Correct"));
+      const input = node("input", { type: "text", "aria-label": `Choice ${i + 1}` });
+      input.value = choice.text;
+      input.addEventListener("input", () => { choice.text = input.value; touched(); });
+      row.append(correct, input, button("Remove", () => commit(() => choices.splice(i, 1))));
+      parent.append(row);
+    });
+    parent.append(button("+ Add choice", () => commit(() => choices.push({ text: "", correct: false }))));
+  }
+  function list() {
+    const box = $("question-list"); box.replaceChildren();
+    bank.questions.forEach((q, i) => {
+      const b = button("", () => { selected = q.id; editor(); list(); });
+      b.className = "question-link" + (q.id === selected ? " active" : "");
+      b.setAttribute("aria-current", q.id === selected ? "true" : "false");
+      b.append(node("span", {}, `${i + 1}. ${q.title || "Untitled question"}`),
+        node("small", {}, `${C.TYPES[q.type]} · ${Number.isFinite(q.points) ? q.points : "?"} pt`));
+      box.append(b);
+    });
+    $("question-count").textContent = String(bank.questions.length);
+    const total = bank.questions.reduce((n, q) => n + (Number.isFinite(q.points) ? q.points : 0), 0);
+    $("summary").textContent = `${bank.questions.length} entries · ${Number(total.toFixed(3))} points`;
+  }
+  function move(direction) {
+    const i = bank.questions.findIndex(q => q.id === selected), j = i + direction;
+    if (j < 0 || j >= bank.questions.length) return;
+    commit(() => { [bank.questions[i], bank.questions[j]] = [bank.questions[j], bank.questions[i]]; });
+  }
+  function editor() {
+    const box = $("editor"), q = active();
+    box.replaceChildren();
+    if (!q) {
+      box.append(node("div", { class: "empty" }));
+      box.firstChild.append(node("h2", {}, "Your next quiz starts here"),
+        node("p", {}, "Choose a question type on the left, or load the example bank."),
+        button("+ Add multiple choice", () => add("multiple_choice"), "primary"));
+      $("preview-section").hidden = true; return;
+    }
+    const actions = node("div", { class: "question-actions" });
+    const index = bank.questions.indexOf(q);
+    const up = button("↑ Move up", () => move(-1)), down = button("↓ Move down", () => move(1));
+    up.disabled = index === 0; down.disabled = index === bank.questions.length - 1;
+    actions.append(button("Duplicate", () => commit(() => {
+      const copy = C.clone(q); copy.id = C.question().id; copy.title = q.title ? q.title + " (copy)" : "";
+      bank.questions.splice(index + 1, 0, copy); selected = copy.id;
+    })), up, down, button("Delete", () => {
+      if (!confirm(`Delete "${q.title || "Untitled question"}"? This cannot be undone.`)) return;
+      commit(() => {
+        bank.questions.splice(index, 1);
+        bank.questions.forEach(other => { if (other.stimulusId === q.id) other.stimulusId = ""; });
+        selected = bank.questions[Math.min(index, bank.questions.length - 1)]?.id || "";
+      });
+    }, "danger"));
+    box.append(actions);
+    box.append(select("Question type", q.type, Object.entries(C.TYPES), type => {
+      if (type !== q.type && confirm("Change type? The answer settings for this question will be reset.")) {
+        const fresh = C.question(type);
+        Object.assign(fresh, { id: q.id, title: q.title, prompt: q.prompt, solution: q.solution,
+          points: ["text_only", "stimulus"].includes(type) ? 0 : (q.points || 1) });
+        bank.questions[index] = fresh;
+      }
+    }));
+    if (C.ADVANCED.includes(q.type) || (q.type === "calculated" && target === "new")) {
+      const descriptions = {
+        ordering: "Portable QTI ordering. Canvas recognition must be tested. Not available in Classic.",
+        categorization: "Portable QTI exports this as many-to-one matching, not guaranteed native Canvas Categorisation.",
+        hotspot: "Draw a rectangle on a local PNG/JPEG image. Portable hotspot import requires Canvas testing.",
+        stimulus: "A stimulus is shared information, not a scored question. Students read it before answering the linked questions. Export repeats these givens in each linked question; it does not create a native Canvas linked stimulus.",
+        calculated: "New Quizzes export creates a separate numerical item for every sample. Classic exports a calculated question."
+      };
+      box.append(node("div", { class: "notice" }, descriptions[q.type]));
+    }
+    const columns = node("div", { class: "columns" });
+    columns.append(field("Question title", q.title, v => { q.title = v; }),
+      field("Points", q.points, v => { q.points = v; }, { number: true, min: 0 }));
+    box.append(columns, field(q.type === "stimulus" ? "Shared givens / context (not the answer)" : "Question text", q.prompt, v => { q.prompt = v; },
+      { area: true, rows: 5, help: q.type === "stimulus" ?
+        "Example: A stereo rig has f = 1000 px and B = 0.2 m. Link separate questions asking for depth at different disparities. Keep points at zero." :
+        "Plain text; line breaks are preserved. For blanks/formulas, use [name] placeholders." }));
+    if (!["text_only", "stimulus"].includes(q.type)) {
+      const stimuli = bank.questions.filter(s => s.type === "stimulus");
+      box.append(select("Shared stimulus (optional)", q.stimulusId,
+        [["", "None — all givens are in this question"], ...stimuli.map(s => [s.id, s.title || "Untitled stimulus"])], v => { q.stimulusId = v; }));
+      box.append(node("p", { class: "hint" }, "A stimulus supplies shared givens above this question. Choose the same stimulus for questions using the same setup; check Student preview below."));
+    } else if (q.type === "stimulus") {
+      const linked = bank.questions.filter(other => other.stimulusId === q.id);
+      const el = panel(`Linked questions (${linked.length})`,
+        "This entry has no answer box and no marks. At least one question must use it. Add a linked question here, or choose this stimulus in an existing question.");
+      linked.forEach(other => el.append(button(other.title || "Untitled question", () => {
+        selected = other.id; editor(); list();
+      })));
+      const label = node("label", {}, "Type of linked question"), type = node("select");
+      for (const [id, text] of Object.entries(C.TYPES))
+        if (!["stimulus", "text_only"].includes(id)) type.append(node("option", { value: id }, text));
+      type.value = "numerical";
+      label.append(type);
+      el.append(label, button("+ Add linked question", () => add(type.value, q.id)));
+      box.append(el);
+    }
+    if (["multiple_choice", "multiple_answers"].includes(q.type)) {
+      const el = panel("Answer choices", q.type === "multiple_choice" ? "Mark exactly one correct answer." : "Mark all correct answers.");
+      choiceRows(el, q.choices, q.type === "multiple_answers", q.id); box.append(el);
+    } else if (q.type === "true_false") {
+      box.append(select("Correct answer", String(q.answer), [["true", "True"], ["false", "False"]], v => { q.answer = v === "true"; }));
+    } else if (q.type === "short_answer") {
+      const el = panel("Accepted answers", "Each row is an accepted phrase. Comparison is case-insensitive.");
+      textRows(el, q.answers, "Answer"); box.append(el);
+    } else if (["fill_in_multiple_blanks", "multiple_dropdowns"].includes(q.type)) {
+      const el = panel("Blanks", "Use each name in the question text, for example [blank1].");
+      q.blanks.forEach((b, i) => {
+        const sub = panel("Blank " + (i + 1));
+        sub.append(field("Placeholder name", b.name, v => { b.name = v; }));
+        if (q.type === "multiple_dropdowns") choiceRows(sub, b.choices, false, q.id + "_b" + i);
+        else textRows(sub, b.answers, "Accepted answer");
+        sub.append(button("Remove blank", () => commit(() => q.blanks.splice(i, 1)), "danger"));
+        el.append(sub);
+      });
+      el.append(button("+ Add blank", () => commit(() => q.blanks.push({
+        name: "blank" + (q.blanks.length + 1), answers: [""],
+        choices: [{ text: "", correct: false }, { text: "", correct: false }]
+      }))));
+      box.append(el);
+    } else if (q.type === "matching") {
+      const el = panel("Correct pairs", "Right-hand answers can be reused.");
+      q.pairs.forEach((pair, i) => {
+        const row = node("div", { class: "row" });
+        row.append(field(`Left ${i + 1}`, pair.left, v => { pair.left = v; }),
+          field(`Right ${i + 1}`, pair.right, v => { pair.right = v; }),
+          button("Remove", () => commit(() => q.pairs.splice(i, 1))));
+        el.append(row);
+      });
+      el.append(button("+ Add pair", () => commit(() => q.pairs.push({ left: "", right: "" }))));
+      el.append(node("h3", {}, "Optional distractors")); textRows(el, q.distractors, "Distractor"); box.append(el);
+    } else if (q.type === "numerical") {
+      const n = q.numeric, el = panel("Numerical answer", "State the units in the question. Students enter a number only.");
+      el.append(select("Answer mode", n.mode, [["exact", "Value ± absolute tolerance"], ["range", "Inclusive range"],
+        ["precision", "Significant figures"]], v => { n.mode = v; }));
+      if (n.mode === "range") {
+        el.append(field("Minimum", n.min, v => { n.min = v; }, { number: true }),
+          field("Maximum", n.max, v => { n.max = v; }, { number: true }));
+      } else {
+        el.append(field("Correct value", n.value, v => { n.value = v; }, { number: true }));
+        el.append(n.mode === "exact" ?
+          field("Absolute tolerance", n.tolerance, v => { n.tolerance = v; }, { number: true, min: 0 }) :
+          field("Significant figures", n.figures, v => { n.figures = v; }, { number: true, step: 1, min: 1 }));
+      }
+      box.append(el);
+    } else if (q.type === "ordering") {
+      const el = panel("Correct sequence", "Enter the steps in the correct order. The QTI interaction requests shuffled presentation.");
+      textRows(el, q.items, "Step", true); box.append(el);
+    } else if (q.type === "categorization") {
+      const el = panel("Categories and their correct items");
+      q.categories.forEach((c, i) => {
+        const sub = panel("Category " + (i + 1));
+        sub.append(field("Category name", c.name, v => { c.name = v; }));
+        textRows(sub, c.items, "Item");
+        sub.append(button("Remove category", () => commit(() => q.categories.splice(i, 1)), "danger")); el.append(sub);
+      });
+      el.append(button("+ Add category", () => commit(() => q.categories.push({ name: "", items: [""] })))); box.append(el);
+    } else if (q.type === "hotspot") {
+      hotspot(box, q);
+    } else if (q.type === "calculated") {
+      const el = panel("Formula and generated variants", "Arithmetic only: + - * / ^ and parentheses. No functions or scripts.");
+      el.append(field("Formula", q.formula, v => { q.formula = v; }));
+      q.variables.forEach((v, i) => {
+        const row = node("div", { class: "row" });
+        row.append(field("Name", v.name, n => { v.name = n; }),
+          field("Minimum", v.min, n => { v.min = n; }, { number: true }),
+          field("Maximum", v.max, n => { v.max = n; }, { number: true }),
+          field("Decimals", v.decimals, n => { v.decimals = n; }, { number: true, step: 1, min: 0 }),
+          button("Remove", () => commit(() => q.variables.splice(i, 1))));
+        el.append(row);
+      });
+      el.append(button("+ Add variable", () => commit(() => q.variables.push({ name: "", min: 1, max: 10, decimals: 0 }))));
+      const row = node("div", { class: "row" });
+      row.append(field("Samples (1–100)", q.samples, v => { q.samples = v; }, { number: true, step: 1 }),
+        field("Answer decimals", q.decimalPlaces, v => { q.decimalPlaces = v; }, { number: true, step: 1 }),
+        field("Absolute tolerance", q.tolerance, v => { q.tolerance = v; }, { number: true }));
+      el.append(row);
+      const results = node("pre", { class: "preview-text" });
+      el.append(button("Check generated samples", () => {
+        try { results.textContent = C.formulaSets(q).slice(0, 10).map(s =>
+          Object.entries(s.values).map(([k, v]) => `${k}=${v}`).join(", ") + ` → ${s.answer}`).join("\n"); }
+        catch (e) { results.textContent = e.message; status(e.message, true); }
+      }), results); box.append(el);
+    } else if (["essay", "file_upload"].includes(q.type)) {
+      box.append(node("p", { class: "hint" }, "Manual grading required. Use the instructor notes for your rubric."));
+    }
+    box.append(field("Instructor notes / worked solution (not in ZIP)", q.solution, v => { q.solution = v; },
+      { area: true, rows: 3, help: "Saved in your private project JSON only. Not shown in the student preview." }));
+    preview();
+  }
+  function hotspot(box, q) {
+    const el = panel("Image and correct rectangle", "PNG or JPEG, at most 5 MB and 8000 × 8000 pixels. Drag over the correct area or enter coordinates.");
+    const upload = node("input", { type: "file", accept: "image/png,image/jpeg", "aria-label": "Hotspot image" });
+    upload.addEventListener("change", async () => {
+      const file = upload.files[0]; if (!file) return;
+      const controls = [...el.querySelectorAll("input,textarea,button")];
+      controls.forEach(control => { control.disabled = true; });
+      status("Loading hotspot image...");
+      try {
+        if (file.size > 5 * 1024 * 1024 || !["image/png", "image/jpeg"].includes(file.type))
+          throw new Error("Choose a PNG/JPEG image up to 5 MB.");
+        const data = await new Promise((resolve, reject) => {
+          const reader = new FileReader(); reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error("Could not read the image.")); reader.readAsDataURL(file);
+        });
+        const img = new Image();
+        await new Promise((resolve, reject) => {
+          img.onload = resolve; img.onerror = () => reject(new Error("The image could not be decoded.")); img.src = data;
+        });
+        if (img.naturalWidth > 8000 || img.naturalHeight > 8000) throw new Error("Image dimensions exceed 8000 pixels.");
+        q.image = { data, name: file.name, width: img.naturalWidth, height: img.naturalHeight, alt: q.image.alt, rect: null };
+        touched(); editor();
+      } catch (e) { status(e.message, true); }
+      finally { controls.forEach(control => { control.disabled = false; }); }
+    });
+    el.append(upload, field("Image alternative text", q.image.alt, v => { q.image.alt = v; }));
+    if (q.image.data) {
+      const stage = node("div", { class: "hotspot-stage", "aria-label": "Drag to select correct rectangle" });
+      const image = node("img", { src: q.image.data, alt: q.image.alt || "Hotspot image" });
+      const rect = node("div", { class: "hotspot-rect" }); stage.append(image, rect);
+      function draw() {
+        const r = q.image.rect;
+        rect.hidden = !r;
+        if (r) Object.assign(rect.style, { left: `${100 * r[0] / q.image.width}%`, top: `${100 * r[1] / q.image.height}%`,
+          width: `${100 * (r[2] - r[0]) / q.image.width}%`, height: `${100 * (r[3] - r[1]) / q.image.height}%` });
+      }
+      const point = e => {
+        const bounds = stage.getBoundingClientRect();
+        return [Math.max(0, Math.min(q.image.width, Math.round((e.clientX - bounds.left) / bounds.width * q.image.width))),
+          Math.max(0, Math.min(q.image.height, Math.round((e.clientY - bounds.top) / bounds.height * q.image.height)))];
+      };
+      let start = null;
+      stage.addEventListener("pointerdown", e => {
+        e.preventDefault(); start = point(e); stage.setPointerCapture(e.pointerId);
+      });
+      stage.addEventListener("pointermove", e => {
+        if (!start) return;
+        const end = point(e);
+        q.image.rect = [Math.min(start[0], end[0]), Math.min(start[1], end[1]), Math.max(start[0], end[0]), Math.max(start[1], end[1])];
+        draw();
+      });
+      stage.addEventListener("pointerup", () => { if (start) { start = null; touched(); editor(); } });
+      stage.addEventListener("pointercancel", () => { start = null; touched(); });
+      el.append(stage, node("p", { class: "hint" }, `${q.image.name} · ${q.image.width} × ${q.image.height} pixels`));
+      const coords = node("div", { class: "image-coordinates" });
+      ["Left x", "Top y", "Right x", "Bottom y"].forEach((label, i) => coords.append(
+        field(label, q.image.rect?.[i] ?? 0, value => {
+          if (!q.image.rect) q.image.rect = [0, 0, 0, 0];
+          q.image.rect[i] = value; draw();
+        }, { number: true, step: 1, min: 0 })));
+      el.append(coords); draw();
+    }
+    box.append(el);
+  }
+  function preview() {
+    const q = active(), box = $("preview"); box.replaceChildren();
+    $("preview-section").hidden = !q;
+    if (!q) return;
+    const stimulus = bank.questions.find(s => s.id === q.stimulusId);
+    if (stimulus) {
+      const context = node("div", { class: "preview-context" });
+      context.append(node("strong", {}, "Shared givens: " + stimulus.title),
+        node("div", { class: "preview-text" }, stimulus.prompt));
+      box.append(context);
+    }
+    if (q.type === "stimulus")
+      box.append(node("p", { class: "hint" }, "Shared context only — no student response or marks. Select a linked question to see these givens together with its question text."));
+    box.append(node("h3", {}, q.title || "Untitled question"), node("div", { class: "preview-text" }, q.prompt || "Your question text will appear here."));
+    if (["multiple_choice", "multiple_answers", "true_false"].includes(q.type)) {
+      const ul = node("ul", { class: "preview-choices" });
+      const values = q.type === "true_false" ? ["True", "False"] : q.choices.map(c => c.text);
+      values.forEach(value => ul.append(node("li", {}, (q.type === "multiple_answers" ? "☐ " : "○ ") + (value || "Empty choice"))));
+      box.append(ul);
+    } else if (q.type === "hotspot" && q.image.data) {
+      box.append(node("img", { src: q.image.data, alt: q.image.alt, style: "max-width:100%;max-height:320px" }));
+      box.append(node("p", { class: "hint" }, "Students select a location. The answer rectangle is not shown in this preview."));
+    } else if (q.type === "ordering") {
+      // Do not display the authored correct sequence as a student preview.
+      const ul = node("ul");
+      [...q.items].reverse().forEach(value => ul.append(node("li", {}, value || "Empty step")));
+      box.append(ul, node("p", { class: "hint" }, "Example shuffled presentation; Canvas controls the actual shuffle."));
+    } else if (q.type === "matching" || q.type === "categorization") {
+      const pairs = q.type === "matching" ? q.pairs : q.categories.flatMap(c => c.items.map(left => ({ left, right: c.name })));
+      pairs.forEach(pair => box.append(node("p", {}, (pair.left || "Empty item") + " → [choose an answer]")));
+    } else if (!["stimulus", "text_only", "multiple_dropdowns", "fill_in_multiple_blanks"].includes(q.type)) {
+      box.append(node("p", { class: "preview-answer" }, q.type === "file_upload" ? "[Upload a file]" :
+        q.type === "essay" ? "[Written response]" : "[Enter your answer]"));
+    }
+  }
+  function add(type, stimulusId = "") {
+    if (bank.questions.length >= 500) { status("Maximum 500 entries per project.", true); return; }
+    commit(() => { const q = C.question(type); q.stimulusId = stimulusId; bank.questions.push(q); selected = q.id; });
+  }
+  function replace(next) {
+    clearTimeout(draftTimer);
+    bank = next; selected = bank.questions[0]?.id || "";
+    $("bank-title").value = bank.title; touched(); editor();
+  }
+  function mayReplace() { return !bank.questions.length || confirm("Replace the current bank? Save project first if you need to keep it."); }
+  function download(name, bytes, type) {
+    const blob = new Blob([bytes], { type }), url = URL.createObjectURL(blob);
+    const link = node("a", { href: url, download: name }); document.body.append(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+  function filename(suffix) { return (bank.title.replace(/[^A-Za-z0-9_-]+/g, "_").slice(0, 80) || "question_bank") + suffix; }
+  function showErrors(errors) {
+    const box = $("issues"); box.replaceChildren();
+    box.hidden = !errors.length;
+    if (!errors.length) return;
+    box.append(node("strong", {}, `Please fix ${errors.length} issue${errors.length === 1 ? "" : "s"} before export.`));
+    const ul = node("ul"); errors.forEach(error => ul.append(node("li", {}, error))); box.append(ul);
+    box.scrollIntoView({ block: "start", behavior: "smooth" });
+  }
+  for (const [id, label] of Object.entries(C.TYPES)) $("add-type").append(node("option", { value: id }, label));
+  $("add-question").addEventListener("click", () => add($("add-type").value));
+  $("bank-title").addEventListener("input", e => { bank.title = e.target.value; touched(); });
+  $("target").addEventListener("change", e => { target = e.target.value; editor(); $("issues").hidden = true; });
+  $("new-project").addEventListener("click", () => { if (mayReplace()) replace(C.project()); });
+  $("load-example").addEventListener("click", () => {
+    try {
+      const next = JSON.parse($("practice-data").textContent);
+      C.shape(next);
+      if (mayReplace()) {
+        replace(next);
+        status("Practice Q1–Q20 loaded. Select the Q13 shared stereo rig to explore its linked questions. Use New Quizzes export for this example.");
+      }
+    } catch (error) { status("Could not load practice example: " + error.message, true); }
+  });
+  $("load-project").addEventListener("click", () => $("project-file").click());
+  $("project-file").addEventListener("change", async e => {
+    const file = e.target.files[0]; if (!file) return;
+    try {
+      if (file.size > 30 * 1024 * 1024) throw new Error("Project file exceeds 30 MB.");
+      const next = JSON.parse(await file.text()); C.shape(next);
+      if (mayReplace()) { replace(next); status("Project loaded. Incomplete questions can be edited before export."); }
+    } catch (error) { status("Could not open project: " + error.message, true); }
+    e.target.value = "";
+  });
+  $("save-project").addEventListener("click", () => {
+    try {
+      C.shape(bank);
+      // JSON cannot preserve NaN from an empty number field.
+      const roundTrip = JSON.parse(JSON.stringify(bank)); C.shape(roundTrip);
+      download(filename(".quiz.json"), JSON.stringify(bank, null, 2), "application/json");
+      dirty = false; status("Project download requested. Save the JSON in local-json (or move it there from Downloads). Keep it private; use Open project to edit it later.");
+    } catch (e) { status("Cannot save project: " + e.message + " Check empty numeric fields.", true); }
+  });
+  $("validate").addEventListener("click", () => {
+    const errors = C.validate(bank, target); showErrors(errors);
+    status(errors.length ? "Validation failed. See the listed issues." : "Validation passed. Review compatibility notes during export.", !!errors.length);
+  });
+  $("export").addEventListener("click", async () => {
+    try {
+      const errors = C.validate(bank, target); showErrors(errors);
+      if (errors.length) { status("Export blocked until the listed issues are fixed.", true); return; }
+      const snapshot = C.clone(bank);
+      for (const q of snapshot.questions.filter(q => q.type === "hotspot")) {
+        const image = new Image();
+        await new Promise((resolve, reject) => {
+          image.onload = resolve;
+          image.onerror = () => reject(new Error(`${q.title}: image could not be decoded. Upload it again.`));
+          image.src = q.image.data;
+        });
+        if (image.naturalWidth !== q.image.width || image.naturalHeight !== q.image.height)
+          throw new Error(`${q.title}: stored image dimensions do not match the actual image. Upload it again.`);
+      }
+      exportResult = C.build(snapshot, target);
+      for (const [name, content] of Object.entries(exportResult.files)) {
+        if (name.endsWith(".xml")) {
+          const parsed = new DOMParser().parseFromString(content, "application/xml");
+          if (parsed.querySelector("parsererror")) throw new Error("Generated XML could not be parsed: " + name);
+        }
+      }
+      $("export-summary").textContent = `${exportResult.count} exported items · ${exportResult.points} total points · ${target === "new" ? "QTI 2.1 for New Quizzes" : "Classic QTI 1.2"}`;
+      $("export-notices").replaceChildren(...exportResult.notices.map(value => node("li", {}, value)));
+      $("export-confirm").checked = false; $("download-zip").disabled = true;
+      $("export-dialog").showModal();
+    } catch (e) { status("Export failed: " + e.message, true); }
+  });
+  $("export-confirm").addEventListener("change", e => { $("download-zip").disabled = !e.target.checked; });
+  $("download-zip").addEventListener("click", () => {
+    if (!$("export-confirm").checked || !exportResult) return;
+    try {
+      download(filename(target === "new" ? "_new_quizzes.zip" : "_classic.zip"), C.zip(exportResult.files), "application/zip");
+      $("export-dialog").close(); status("ZIP download requested. Save it in export (or move it there from Downloads), then import into an unpublished Canvas quiz and test it.");
+    } catch (e) { status("ZIP creation failed: " + e.message, true); }
+  });
+  $("help-open").addEventListener("click", () => $("help-dialog").showModal());
+  document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => $(b.dataset.close).close()));
+  window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+  try {
+    const stored = localStorage.getItem(storageKey) ||
+      (location.pathname.endsWith("/quiz-editor.html") ? localStorage.getItem(legacyStorageKey) : null);
+    if (stored) {
+      bank = C.shape(JSON.parse(stored)); selected = bank.questions[0]?.id || "";
+      status("Restored your local draft. Use Save project for a durable backup.");
+    } else status("Ready. Start a bank or load the example. Nothing is sent to a server.");
+  } catch (e) { status("Local draft storage is unavailable or invalid: " + e.message + ". Use project save/load.", true); }
+  $("bank-title").value = bank.title; list(); editor();
+})();
+</script>
+</body>
+</html>

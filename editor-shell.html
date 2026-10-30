@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Quiz Studio | Canvas authoring</title>
+  <style>/*__EDITOR_CSS__*/</style>
+</head>
+<body>
+  <header class="masthead">
+    <div><span class="eyebrow">UNIVERSITY OF GALWAY · TEACHING TOOLS</span><h1>Quiz Studio</h1>
+      <p>Write once. Build a question bank. Export for Canvas.</p></div>
+    <div class="offline"><span aria-hidden="true">●</span> Offline · No uploads · No server</div>
+  </header>
+  <nav class="toolbar" aria-label="Project actions">
+    <button id="new-project">New bank</button>
+    <button id="load-example">Load example</button>
+    <button id="load-project" title="Open a .quiz.json file from local-json">Open project</button>
+    <button id="save-project" title="Download an editable .quiz.json file; save it in local-json">Save project</button>
+    <span class="spacer"></span>
+    <button id="help-open">Help &amp; references</button>
+    <button id="validate">Validate</button>
+    <button id="export" class="primary">Export Canvas ZIP</button>
+  </nav>
+  <input id="project-file" type="file" accept=".json,application/json" hidden>
+  <section class="bank-settings" aria-label="Bank settings">
+    <label class="bank-title">Bank title<input id="bank-title" type="text" maxlength="200"></label>
+    <label>Export target<select id="target"><option value="new">New Quizzes · portable QTI 2.1</option>
+      <option value="classic">Classic Quizzes · QTI 1.2</option></select></label>
+    <div id="summary" class="summary"></div>
+  </section>
+  <div id="status" role="status" aria-live="polite"></div>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="Question list">
+      <div class="section-heading"><h2>Questions</h2><span id="question-count" class="badge">0</span></div>
+      <label>Add a question<select id="add-type"></select></label>
+      <button id="add-question" class="primary full">+ Add question</button>
+      <div id="question-list"></div>
+      <p class="sidebar-tip">Tip: duplicate a question to reuse its settings. Save your project to keep editing later.</p>
+    </aside>
+    <main>
+      <div id="issues" class="issues" role="alert" hidden></div>
+      <section id="editor" aria-label="Question editor"></section>
+      <section id="preview-section" class="preview-card" hidden>
+        <div class="section-heading"><h2>Student preview</h2><span class="badge">Approximation</span></div>
+        <p class="hint">Layout and grading controls may differ after Canvas import.</p>
+        <div id="preview"></div>
+      </section>
+    </main>
+  </div>
+  <dialog id="export-dialog" aria-labelledby="export-title">
+    <div class="section-heading"><h2 id="export-title">Review your export</h2><button data-close="export-dialog" aria-label="Close export">✕</button></div>
+    <p id="export-summary"></p>
+    <p>Save the downloaded ZIP in the <strong>export</strong> folder. Import this ZIP into Canvas;
+      keep editable JSON projects separately in <strong>local-json</strong>.</p>
+    <div class="notice"><strong>Compatibility and privacy</strong><ul id="export-notices"></ul></div>
+    <label class="check"><input id="export-confirm" type="checkbox"> I have read these notes and will test the import in an unpublished Canvas quiz.</label>
+    <div class="dialog-actions"><button data-close="export-dialog">Cancel</button><button id="download-zip" class="primary" disabled>Download ZIP</button></div>
+  </dialog>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <div class="section-heading"><h2 id="help-title">A simpler way to author quizzes</h2><button data-close="help-dialog" aria-label="Close help">✕</button></div>
+    <ol class="steps">
+      <li><strong>Name the bank.</strong> Add a question and choose its type.</li>
+      <li><strong>Write the question.</strong> Fill in answers and mark the correct choices. Everything is entered through forms, not JSON or Markdown.</li>
+      <li><strong>Build your bank.</strong> Duplicate questions, reorder them, and preview the student-facing text.</li>
+      <li><strong>Save project.</strong> Save the downloaded JSON in <strong>local-json</strong>. It contains answers and instructor notes and can be reopened here.</li>
+      <li><strong>Export Canvas ZIP.</strong> Fix validation errors, read the compatibility notes and save the ZIP in <strong>export</strong>.</li>
+      <li><strong>Test in Canvas.</strong> Create an empty, unpublished New Quiz, open its Build screen, and use its QTI import option. Check all question types and scoring before publishing. For Classic, use Settings → Import Course Content → QTI .zip file.</li>
+    </ol>
+    <h3>Where to save and open files</h3>
+    <ul>
+      <li><strong>local-json</strong>: your editable <code>.quiz.json</code> projects and the supplied
+        practice example. Use <strong>Open project</strong> to select a JSON file from this folder.</li>
+      <li><strong>export</strong>: the <code>.zip</code> packages you import into Canvas.
+        ZIPs cannot be reopened as editable projects in this editor.</li>
+    </ul>
+    <p>These folders are beside this HTML file in the supplied package. In your browser's download
+      settings, enable <strong>Ask where to save each file before downloading</strong> (or the
+      equivalent option), then choose the appropriate folder when saving. If a download goes
+      straight to Downloads, move it into the appropriate folder afterwards.</p>
+    <p>The editor cannot automatically choose these folders or write beside the HTML file.
+      Keep both folders private: JSON contains solutions and ZIP contains grading keys.
+      <strong>Load example</strong> still works from the single HTML file without either folder.</p>
+    <h3>What is a stimulus?</h3>
+    <p>A <strong>stimulus is shared information</strong> used by several questions: a passage, scenario,
+      matrix or set of given values. It is not a question, has no answer box and earns no marks.
+      Keep solutions in private instructor notes, not in the stimulus.</p>
+    <p><strong>Example:</strong> “A stereo rig has f = 1000 px and B = 0.2 m” is the stimulus.
+      “Find depth at disparity 40 px” and “Find depth at disparity 25 px” are two separate
+      numerical questions linked to that same stimulus.</p>
+    <ol>
+      <li>Add a <strong>Shared stimulus</strong>, name it and enter the shared givens.</li>
+      <li>Use <strong>Add linked question</strong> on that entry, or select it in an existing question's
+        <strong>Shared stimulus (optional)</strong> dropdown.</li>
+      <li>Check <strong>Student preview</strong>: the givens appear above the question.</li>
+    </ol>
+    <p>Try <strong>Load example</strong> and select <strong>Q13 — Shared stereo rig</strong>.
+      This instructor example contains all 20 practice questions and their worked notes:
+      76 scored items (43 numerical, 33 essay), 12 shared stimuli, and 180 points.
+      Save your current project before replacing it.</p>
+    <h3>Important limits</h3>
+    <p>New Quizzes export uses portable QTI 2.1, not a certified native Canvas exporter.
+      Categorisation uses many-to-one matching. Stimulus text is repeated in linked questions.
+      Formula samples become separate numerical questions. Ordering and hotspots require import testing.
+      The export screen explains these transformations before download.</p>
+    <p>Prompts use plain text and line breaks. LaTeX and HTML are not rendered. Images are supported for hotspots (local PNG/JPEG, up to 5 MB).
+      Formulas allow variables, numbers, parentheses and + − * / ^. No scripts or functions are evaluated.</p>
+    <p>There are no network requests. Browser drafts may be unavailable, cleared, or associated with this file location.
+      <strong>Save project is your backup.</strong> Do not share source projects or ZIP answer keys with students.</p>
+    <h3>Format sources</h3>
+    <ul class="references">
+      <li><a href="https://www.imsglobal.org/question/qtiv2p1/imsqti_implv2p1.html" target="_blank" rel="noopener noreferrer">1EdTech QTI 2.1 Implementation Guide</a> — portable interactions, declarations and scoring.</li>
+      <li><a href="https://developerdocs.instructure.com/services/canvas/resources/new_quiz_items" target="_blank" rel="noopener noreferrer">Instructure New Quiz Items API</a> — Canvas-native question types; this is not a QTI import specification.</li>
+      <li><a href="https://github.com/instructure/canvas-lms/blob/master/lib/cc/qti/qti_items.rb" target="_blank" rel="noopener noreferrer">Canvas Classic QTI exporter (GitHub)</a> — Classic encodings and formula extensions.</li>
+      <li><a href="https://github.com/instructure/canvas-lms/blob/master/lib/cc/qti/new_quizzes_generator.rb" target="_blank" rel="noopener noreferrer">Canvas New Quizzes package integration (GitHub)</a> — delegates native export to another service; it does not specify every native interaction.</li>
+    </ul>
+    <p class="hint">References consulted 29 October 2026. Project JSON and this editor's forms are custom formats, not Canvas standards.</p>
+    <button data-close="help-dialog" class="primary">Start writing</button>
+  </dialog>
+  <footer>Quiz Studio · Local authoring for Canvas · Keep answer keys private</footer>
+  <script type="application/json" id="practice-data">/*__PRACTICE_JSON__*/</script>
+  <script>/*__CORE_JS__*/</script>
+  <script>/*__EDITOR_JS__*/</script>
+</body>
+</html>
