@@ -265,9 +265,7 @@ It has no external package dependencies.
 1. Create an **unpublished test quiz** and select the intended export engine.
 2. Export the bank and import its ZIP using the matching route described in
    [Importing](#importing).
-3. Compare question counts, titles, prompts, units and points. The complete
-   Q1–Q20 example should import as **76 scored items totalling 180 points**;
-   its 12 shared stimuli are repeated as context, not separate native stimuli.
+3. Compare question counts, titles, prompts, units and points.
 4. Preview correct and incorrect answers. Check numerical rounding/tolerances,
    manual grading, and any partial-credit behaviour.
 5. For advanced types, check ordering, hotspot regions, categorisation-as-
