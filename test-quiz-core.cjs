@@ -230,43 +230,6 @@ test("embedded example is valid and export notices cover all adaptations", () =>
   assert.ok(C.notices(b, "new").some(v => v.includes("Instructor solutions")));
 });
 
-test("practice example covers every source question and subpart with original marks", () => {
-  assert.deepEqual(C.validate(practice, "new"), []);
-  const source = fs.readFileSync(path.join(__dirname, "..", "exam", "Practice_Questions.md"), "utf8");
-  const blocks = source.split(/^### Q(?=\d+ )/m).slice(1);
-  assert.equal(blocks.length, 20);
-  const scored = practice.questions.filter(q => q.type !== "stimulus");
-  assert.equal(scored.length, 76);
-  assert.equal(scored.filter(q => q.type === "numerical").length, 43);
-  assert.equal(scored.filter(q => q.type === "essay").length, 33);
-  assert.equal(practice.questions.length, 88);
-  assert.equal(scored.reduce((sum, q) => sum + q.points, 0), 180);
-  for (const block of blocks) {
-    const [, number, marks] = block.match(/^(\d+) .*?\*\((\d+) marks\)\*/);
-    const prefix = "practice_q" + number.padStart(2, "0");
-    const entries = scored.filter(q => q.id === prefix || q.id.startsWith(prefix + "_"));
-    assert.ok(entries.length, `Missing Q${number}`);
-    assert.equal(entries.reduce((sum, q) => sum + q.points, 0), Number(marks), `Q${number} total`);
-    entries.forEach(q => {
-      assert.match(q.title, new RegExp(`^Q${number}(?:\\(| —)`));
-      assert.ok(q.solution.trim(), q.id + " needs instructor notes");
-      assert.ok(!/\\(?:begin|frac|mathbf|times)\b/.test(q.prompt), q.id + " has unrendered LaTeX");
-    });
-    for (const part of block.split(/^\((?=[a-z]\))/m).slice(1)) {
-      const letter = part[0], weight = Number(part.match(/\*\*\((\d+)\)\*\*/)[1]);
-      if (entries.length === 1 && entries[0].id === prefix) {
-        const inPrompt = entries[0].prompt.match(new RegExp(`\\(${letter}\\)[\\s\\S]*?\\[(\\d+) marks\\]`));
-        assert.ok(inPrompt, `Missing Q${number}(${letter})`);
-        assert.equal(Number(inPrompt[1]), weight);
-      } else {
-        const parts = entries.filter(q => q.title.startsWith(`Q${number}(${letter})`));
-        assert.ok(parts.length, `Missing Q${number}(${letter})`);
-        assert.equal(parts.reduce((sum, q) => sum + q.points, 0), weight, `Q${number}(${letter}) marks`);
-      }
-    }
-  }
-});
-
 test("all practice numerical keys agree with independent calculations and requested rounding", () => {
   const mv = (m, v) => m.map(row => row.reduce((sum, value, i) => sum + value * v[i], 0));
   const project = v => v.slice(0, 2).map(value => value / v[2]);

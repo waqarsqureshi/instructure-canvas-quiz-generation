@@ -250,7 +250,8 @@ Use **Load example** for the full practice set.
   Q1–Q20 instructor example, also embedded by the build.
 - [test-quiz-core.cjs](test-quiz-core.cjs): Node.js tests.
 
-Only developers changing the source need Node.js (20 or later):
+Only developers building or testing the source need Node.js (20 or later).
+Rebuild the standalone HTML from this folder with:
 
 ```powershell
 node build-editor.cjs
@@ -259,6 +260,14 @@ node build-editor.cjs
 The build embeds the application sources and the practice JSON into the HTML.
 It has no external package dependencies.
 
+Run the automated test suite from this folder with:
+
+```powershell
+node --test test-quiz-core.cjs
+```
+
+The tests are for developers checking source changes. They use Node.js's built-in
+test runner and require no package installation.
 
 ### Repeat the Canvas test before publishing a quiz
 
