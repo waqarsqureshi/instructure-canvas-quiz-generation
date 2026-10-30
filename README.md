@@ -39,24 +39,6 @@ product of Instructure, Microsoft or the University of Galway.
    a Canvas import package. These are different file formats.
 5. Import into an unpublished Canvas quiz and verify the result before use.
 
-### Before uploading this project to GitHub
-
-**The bundled practice example contains correct answers and worked solutions.
-These are also embedded in the generated HTML.** Publishing this repository
-or hosting the HTML publicly makes that content available to students.
-
-- Use a **private repository** if the questions or solutions must remain
-  confidential. If publishing publicly, treat the bundled questions as public
-  practice material, not a confidential assessment bank.
-- Do not upload personal saved projects, live assessment ZIPs, student data,
-  credentials or Canvas access tokens.
-- Removing a JSON file alone does not remove its embedded content from the
-  HTML. Replace sensitive example content and rebuild before publishing;
-  also check previously published files and repository history.
-- Retain the format-source references below. Choose and add an appropriate
-  licence before presenting the repository as licensed for reuse; AI-generated
-  code does not itself establish a repository licence.
-
 ## Instructor workflow
 
 ### Bulk loading from a Word question bank
