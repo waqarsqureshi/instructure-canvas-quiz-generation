@@ -259,53 +259,6 @@ node build-editor.cjs
 The build embeds the application sources and the practice JSON into the HTML.
 It has no external package dependencies.
 
-Run the automated suite from this folder:
-
-```powershell
-node --test test-quiz-core.cjs
-```
-
-**Source-coverage test prerequisite:** the full suite also reads
-`..\exam\Practice_Questions.md` from the original teaching workspace to check
-every source subpart and mark allocation. A checkout containing only this
-editor folder will need that authorised source document at the expected
-relative location to run the full suite. It is not needed to build or use the
-editor. Do not mistake a missing source fixture for a Canvas export failure.
-
-Rebuild after editing the sources. Test using the generated HTML opened as a
-local `file://` page, not just through a web server.
-
-## Testing status
-
-| Check | Recorded result |
-|---|---|
-| Local automated suite | **26 tests passed** in the original teaching workspace |
-| QTI 2.1 schema validation | **18 generated fixture documents passed** the official schema |
-| Browser authoring and export | Save/load, preview, ZIP generation and interaction checks completed locally |
-| University of Galway Canvas | **Manually tested by the instructor**, as reported by the project owner |
-
-The Canvas result is an **instructor-reported manual test**, not an automated
-test performed by the AI assistant. The specific quiz engine (Classic or New
-Quizzes), Canvas version, test date and per-question-type coverage were not
-recorded. It should not be interpreted as certification of every export type
-or compatibility with every Canvas installation.
-
-### Local verification details
-
-- 26 automated tests cover model/export/ZIP behaviour, practice-source subpart
-  coverage and marks, all 43 numerical keys, and embedded-example parity.
-- All 18 generated QTI 2.1 test and item documents in the all-types fixture
-  passed validation against the official QTI 2.1 XML schema.
-- Both Classic and portable ZIPs were independently opened; their XML parsed
-  and their manifest file/dependency references resolved.
-- Browser checks covered authoring, duplication, private project save/load,
-  export acknowledgement, ZIP Blob generation, hotspot upload and rectangle
-  drawing, and a 390-pixel mobile layout. Downloaded ZIP and project files were
-  also confirmed on disk and inspected.
-
-Local validation and the reported manual Canvas test are complementary:
-well-formed QTI does not by itself prove that Canvas displays or grades every
-interaction as intended.
 
 ### Repeat the Canvas test before publishing a quiz
 
