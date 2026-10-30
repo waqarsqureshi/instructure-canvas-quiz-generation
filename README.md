@@ -114,7 +114,7 @@ separate from Canvas import packages:
 | Folder | Contents | How to use it |
 |---|---|---|
 | [local-json/](local-json/) | Editable `.quiz.json` projects, including the bundled practice example | **Save project** into this folder; **Open project** to select a JSON file here |
-| [export/](export/) | Exported Canvas `.zip` packages; the older `example_questions.zip` is a legacy Classic example | **Export Canvas ZIP**, then **Download ZIP** into this folder; select that ZIP when importing in Canvas |
+| [export/](export/) | Exported Canvas `.zip` packages | **Export Canvas ZIP**, then **Download ZIP** into this folder; select that ZIP when importing in Canvas |
 
 In your browser's **Downloads** settings, enable **Ask where to save each file
 before downloading** (or the equivalent option). Choose the relevant folder in
@@ -235,10 +235,7 @@ package does not configure Canvas-specific publication or result visibility.
 - Project limit: 500 entries. ZIP limit: 100 MB. No Canvas login or API token is
   requested.
 
-The older [example_questions.md](example_questions.md) and
-[example_questions.zip](export/example_questions.zip) remain as legacy examples; they
-are not browser-editor project files. Use **Load example** for the full practice
-set.
+Use **Load example** for the full practice set.
 
 ## Files and developer checks
 
