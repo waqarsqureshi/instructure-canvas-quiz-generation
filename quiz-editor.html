@@ -28,6 +28,8 @@ dialog{border:none;border-radius:12px;width:min(760px,94vw);padding:1.5rem;box-s
     <button id="load-example">Load example</button>
     <button id="load-project" title="Open a .quiz.json file from local-json">Open project</button>
     <button id="save-project" title="Download an editable .quiz.json file; save it in local-json">Save project</button>
+    <button id="restore-draft" title="Reload the automatic browser draft from your last session" disabled>Restore last draft</button>
+    <button id="clear-temp" title="Delete the automatic browser draft and start with a blank bank">Clear temp data</button>
     <span class="spacer"></span>
     <button id="help-open">Help &amp; references</button>
     <button id="validate">Validate</button>
@@ -85,10 +87,8 @@ dialog{border:none;border-radius:12px;width:min(760px,94vw);padding:1.5rem;box-s
       <li><strong>export</strong>: the <code>.zip</code> packages you import into Canvas.
         ZIPs cannot be reopened as editable projects in this editor.</li>
     </ul>
-    <p>These folders are beside this HTML file in the supplied package. In your browser's download
-      settings, enable <strong>Ask where to save each file before downloading</strong> (or the
-      equivalent option), then choose the appropriate folder when saving. If a download goes
-      straight to Downloads, move it into the appropriate folder afterwards.</p>
+    <p>In Chrome and Edge, Save project and Download ZIP open a <strong>Save as</strong> window so you can choose the folder. In other browsers the file goes straight to Downloads (or enable
+      <strong>Ask where to save each file before downloading</strong> in the browser settings); move it into the appropriate folder afterwards.</p>
     <p>The editor cannot automatically choose these folders or write beside the HTML file.
       Keep both folders private: JSON contains solutions and ZIP contains grading keys.
       <strong>Load example</strong> still works from the single HTML file without either folder.</p>
@@ -798,6 +798,7 @@ dialog{border:none;border-radius:12px;width:min(760px,94vw);padding:1.5rem;box-s
         const saved = JSON.stringify(bank);
         C.shape(JSON.parse(saved));
         localStorage.setItem(storageKey, saved);
+        refreshDraftButton();
         status("Draft saved in this browser. Download Save project for a durable backup.");
       } catch (e) {
         status("Browser draft could not be saved (" + e.message + "). Use Save project to download your work.", true);
@@ -1162,10 +1163,24 @@ dialog{border:none;border-radius:12px;width:min(760px,94vw);padding:1.5rem;box-s
     $("bank-title").value = bank.title; touched(); editor();
   }
   function mayReplace() { return !bank.questions.length || confirm("Replace the current bank? Save project first if you need to keep it."); }
-  function download(name, bytes, type) {
+  async function download(name, bytes, type) {
+    // Chromium browsers: show a "Save as" dialog so the folder can be chosen. Others fall back to a normal download.
+    if (window.showSaveFilePicker) {
+      try {
+        const ext = name.slice(name.lastIndexOf("."));
+        const handle = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: ext.slice(1).toUpperCase() + " file", accept: { [type]: [ext] } }] });
+        const writable = await handle.createWritable();
+        await writable.write(bytes instanceof Uint8Array ? bytes : new Blob([bytes], { type }));
+        await writable.close();
+        return true;
+      } catch (e) {
+        if (e && e.name === "AbortError") return false;
+      }
+    }
     const blob = new Blob([bytes], { type }), url = URL.createObjectURL(blob);
     const link = node("a", { href: url, download: name }); document.body.append(link); link.click(); link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 30000);
+    return true;
   }
   function filename(suffix) { return (bank.title.replace(/[^A-Za-z0-9_-]+/g, "_").slice(0, 80) || "question_bank") + suffix; }
   function showErrors(errors) {
@@ -1201,13 +1216,13 @@ dialog{border:none;border-radius:12px;width:min(760px,94vw);padding:1.5rem;box-s
     } catch (error) { status("Could not open project: " + error.message, true); }
     e.target.value = "";
   });
-  $("save-project").addEventListener("click", () => {
+  $("save-project").addEventListener("click", async () => {
     try {
       C.shape(bank);
       // JSON cannot preserve NaN from an empty number field.
       const roundTrip = JSON.parse(JSON.stringify(bank)); C.shape(roundTrip);
-      download(filename(".quiz.json"), JSON.stringify(bank, null, 2), "application/json");
-      dirty = false; status("Project download requested. Save the JSON in local-json (or move it there from Downloads). Keep it private; use Open project to edit it later.");
+      if (!await download(filename(".quiz.json"), JSON.stringify(bank, null, 2), "application/json")) { status("Save cancelled."); return; }
+      dirty = false; status("Project saved. Keep it private; use Open project to edit it later.");
     } catch (e) { status("Cannot save project: " + e.message + " Check empty numeric fields.", true); }
   });
   $("validate").addEventListener("click", () => {
@@ -1243,24 +1258,40 @@ dialog{border:none;border-radius:12px;width:min(760px,94vw);padding:1.5rem;box-s
     } catch (e) { status("Export failed: " + e.message, true); }
   });
   $("export-confirm").addEventListener("change", e => { $("download-zip").disabled = !e.target.checked; });
-  $("download-zip").addEventListener("click", () => {
+  $("download-zip").addEventListener("click", async () => {
     if (!$("export-confirm").checked || !exportResult) return;
     try {
-      download(filename(target === "new" ? "_new_quizzes.zip" : "_classic.zip"), C.zip(exportResult.files), "application/zip");
-      $("export-dialog").close(); status("ZIP download requested. Save it in export (or move it there from Downloads), then import into an unpublished Canvas quiz and test it.");
+      if (!await download(filename(target === "new" ? "_new_quizzes.zip" : "_classic.zip"), C.zip(exportResult.files), "application/zip")) { status("Export cancelled."); return; }
+      $("export-dialog").close(); status("ZIP saved. Import it into an unpublished Canvas quiz and test it.");
     } catch (e) { status("ZIP creation failed: " + e.message, true); }
   });
   $("help-open").addEventListener("click", () => $("help-dialog").showModal());
   document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => $(b.dataset.close).close()));
+  function hasDraft() {
+    try { return !!(localStorage.getItem(storageKey) || localStorage.getItem(legacyStorageKey)); } catch (e) { return false; }
+  }
+  function refreshDraftButton() { $("restore-draft").disabled = !hasDraft(); }
+  $("restore-draft").addEventListener("click", () => {
+    try {
+      const stored = localStorage.getItem(storageKey) || localStorage.getItem(legacyStorageKey);
+      if (!stored) { refreshDraftButton(); return; }
+      const next = C.shape(JSON.parse(stored));
+      if (mayReplace()) { replace(next); status("Last browser draft restored. Use Save project for a durable backup."); }
+    } catch (e) { status("Could not restore the draft: " + e.message, true); }
+  });
+  $("clear-temp").addEventListener("click", () => {
+    if (!confirm("Delete the automatic browser draft and clear the editor? Anything not saved with Save project will be lost.")) return;
+    clearTimeout(draftTimer);
+    bank = C.project(); selected = ""; $("bank-title").value = bank.title;
+    try { localStorage.removeItem(storageKey); localStorage.removeItem(legacyStorageKey); } catch (e) { /* storage unavailable */ }
+    dirty = false; $("issues").hidden = true; list(); editor(); preview(); refreshDraftButton();
+    status("Temporary data deleted. The editor is blank.");
+  });
   window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
-  try {
-    const stored = localStorage.getItem(storageKey) ||
-      (location.pathname.endsWith("/quiz-editor.html") ? localStorage.getItem(legacyStorageKey) : null);
-    if (stored) {
-      bank = C.shape(JSON.parse(stored)); selected = bank.questions[0]?.id || "";
-      status("Restored your local draft. Use Save project for a durable backup.");
-    } else status("Ready. Start a bank or load the example. Nothing is sent to a server.");
-  } catch (e) { status("Local draft storage is unavailable or invalid: " + e.message + ". Use project save/load.", true); }
+  // Always start blank; an earlier draft is only loaded when the user presses Restore last draft.
+  refreshDraftButton();
+  status(hasDraft() ? "Ready. A previous browser draft exists: use Restore last draft to reload it, or Clear temp data to delete it. Open project loads a saved .quiz.json."
+                    : "Ready. Start a bank, load the example or open a saved .quiz.json. Nothing is sent to a server.");
   $("bank-title").value = bank.title; list(); editor();
 })();
 </script>
